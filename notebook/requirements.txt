@@ -1,0 +1,10 @@
+openai
+langchain
+langchain-openai
+pyautogen
+setuptools
+python-dotenv
+ipykernel
+jupyter
+notebook
+

@@ -1,0 +1,34 @@
+[
+  {
+    "content": "\n       For the call transcript with id 1, please extract all the entities in the corresponding call transcript and resolve any\n       missing values identified by conversing with the human.\n       ",
+    "role": "assistant"
+  },
+  {
+    "content": "",
+    "function_call": {
+      "arguments": "{\"call_transcript_id\":\"1\"}",
+      "name": "extract_entities"
+    },
+    "name": "text_extractor_agent",
+    "role": "assistant"
+  },
+  {
+    "content": "{\"summary\": \"Customer called to inquire about a specific type of printer and mentioned a recent purchase with order number 12345. The customer was initially in the wrong department and expressed frustration about being on hold previously and getting disconnected. The agent offered to connect the customer to the correct department and also offered a $20 gift card for the trouble, which the customer declined.\", \"orderNumber\": \"12345\", \"productSKU\": \"\", \"driver\": \"Phone\", \"photos\": false, \"agentCall\": false, \"contactType\": \"Phone\", \"productSafteyFlag\": false, \"customerNeed\": \"Technical support\", \"employeeResponse\": \"Referred to other team - unable to help\", \"customerSentimentGoingIn\": \"Negative\", \"customerSentimentGoingOut\": \"Neutral\", \"giftCards\": {\"giftCardOffered\": true, \"giftCardAmount\": \"20\", \"giftCardAccepted\": false}, \"agentName\": \"Valerie\", \"customerName\": null, \"required\": [\"orderNumber\", \"productSKU\"]}",
+    "name": "extract_entities",
+    "role": "function"
+  },
+  {
+    "content": "",
+    "function_call": {
+      "arguments": "{\"extract_entities_output\": \"{\\\"summary\\\": \\\"Customer called to inquire about a specific type of printer and mentioned a recent purchase with order number 12345. The customer was initially in the wrong department and expressed frustration about being on hold previously and getting disconnected. The agent offered to connect the customer to the correct department and also offered a $20 gift card for the trouble, which the customer declined.\\\", \\\"orderNumber\\\": \\\"12345\\\", \\\"productSKU\\\": \\\"\\\", \\\"driver\\\": \\\"Phone\\\", \\\"photos\\\": false, \\\"agentCall\\\": false, \\\"contactType\\\": \\\"Phone\\\", \\\"productSafteyFlag\\\": false, \\\"customerNeed\\\": \\\"Technical support\\\", \\\"employeeResponse\\\": \\\"Referred to other team - unable to help\\\", \\\"customerSentimentGoingIn\\\": \\\"Negative\\\", \\\"customerSentimentGoingOut\\\": \\\"Neutral\\\", \\\"giftCards\\\": {\\\"giftCardOffered\\\": true, \\\"giftCardAmount\\\": \\\"20\\\", \\\"giftCardAccepted\\\": false}, \\\"agentName\\\": \\\"Valerie\\\", \\\"customerName\\\": null, \\\"required\\\": [\\\"orderNumber\\\", \\\"productSKU\\\"]}\"}",
+      "name": "find_missing_values"
+    },
+    "name": "software_engineer_agent",
+    "role": "assistant"
+  },
+  {
+    "content": "['productSKU']",
+    "name": "find_missing_values",
+    "role": "function"
+  }
+]

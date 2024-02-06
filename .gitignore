@@ -1,0 +1,12 @@
+.env
+.DS_Store
+**/.DS_Store
+
+gs9_documentation_index
+venv
+code_index_hf_js
+
+.idea
+.cache
+.chainlit
+__pycache__
