@@ -1,6 +1,6 @@
 import chainlit as cl
 from chainlit.input_widget import Select, Switch
-from agent import start_chat
+from agents.agents import start_chat
 
 @cl.on_chat_start
 async def on_chat_start():
