@@ -8,7 +8,7 @@ call_transcript_1 = {
     }, {
         "source": "customer",
         "timestamp": "2024-01-17T18:26:27.609811",
-        "message": "No. Yes, I just I'm sorry I think I was in the wrong department I need to talk to somebody about printer I bought, the order number is 12345."
+        "message": "No. Yes, I just I'm sorry I think I was in the wrong department I need to talk to somebody about printer I bought, the order number is 12345 and the productSKU is abcd."
     }, {
         "source": "agent",
         "timestamp": "2024-01-17T18:26:33.117753",
@@ -67,7 +67,7 @@ call_transcript_2 = {
   }, {
     "source": "customer",
     "timestamp": "2024-01-17T18:30:04.567761",
-    "message": "Yeah, so I am pissed off! so, um, we've bought a fridge. Through you guys, um, not yesterday, but today for yesterday. And then I received a text yesterday, saying, um, the product was delayed by like."
+    "message": "Yeah, so I am pissed off! so, um, we've bought a fridge (order number 12345). Through you guys, um, not yesterday, but today for yesterday. And then I received a text yesterday, saying, um, the product was delayed by like."
   }, {
     "source": "customer",
     "timestamp": "2024-01-17T18:30:09.908193",
@@ -267,7 +267,7 @@ call_transcript_2 = {
   }, {
     "source": "agent",
     "timestamp": "2024-01-17T18:33:31.030746",
-    "message": "To be clear there are no elements that are required for this transcript!"
+    "message": "productSKU is required for this transcript!"
   }]
 }
 

@@ -1,4 +1,7 @@
-from autogen.agentchat import Agent, AssistantAgent, UserProxyAgent
+#from autogen.agentchat import Agent, AssistantAgent, UserProxyAgent
+import autogen  # noqa E402
+from autogen.agentchat.assistant_agent import AssistantAgent  # noqa E402
+from autogen.agentchat.groupchat import GroupChat, Agent  # noqa E402
 from typing import Dict, Optional, Union, Callable
 import chainlit as cl
 
@@ -7,6 +10,7 @@ async def ask_helper(func, **kwargs):
     while not res:
         res = await func(**kwargs).send()
     return res
+
 
 class ChainlitAssistantAgent(AssistantAgent):
     """
@@ -32,7 +36,7 @@ class ChainlitAssistantAgent(AssistantAgent):
             silent=silent,
         )
         
-class ChainlitUserProxyAgent(UserProxyAgent):
+class ChainlitUserProxyAgent(autogen.UserProxyAgent):
     """
     Wrapper for AutoGens UserProxy Agent. Simplifies the UI by adding CL Actions.
     """

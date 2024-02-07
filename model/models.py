@@ -55,8 +55,8 @@ class CaseSchema(BaseModel):
                          title='A detailed summary of the entire call transcript. Be sure to include why the customer was calling and if the customers issue was resolved, please provide those details in your summary. Do not use the customer or agents actual name in the summary, just refer to them as either "Agent" or "Customer"!')
     requiredElements: Optional[List[str]] = Field(None,
                                 title="Any elements that are explicitly called out in the transcript as being required")
-    orderNumber: Optional[str] = Field(None, title="The customer's order number")
-    productSKU: Optional[str] = Field(None, title="The SKU associated to the product the customer might be calling about")
+    orderNumber: str = Field(..., title="The customer's order number")
+    productSKU: str = Field(..., title="The SKU associated to the product the customer might be calling about. Do not include product brand, make or model in this value.")
     driver: Optional[str] = Field(None,
                         title="A name or description that could be used to identify the individual delivering and/or doing service at the customer's house")
     photos: bool = Field(...,

@@ -70,40 +70,40 @@ missing_value_dict['orderNumber'] = "Please provide the customer's order number"
 missing_value_dict['productSKU'] = "Please provide the SKU for the customer's product"
 
 
-# @dataclass
-# class ExecutorGroupchat(GroupChat):
-#     dedicated_executor: autogen.UserProxyAgent = None
-#
-#     def select_speaker(
-#             self, last_speaker: autogen.ConversableAgent, selector: autogen.ConversableAgent
-#     ):
-#         """Select the next speaker."""
-#
-#         try:
-#             message = self.messages[-1]
-#             if "function_call" in message:
-#                 return self.dedicated_executor
-#         except Exception as e:
-#             print(e)
-#             pass
-#
-#         selector.update_system_message(self.select_speaker_msg())
-#         final, name = selector.generate_oai_reply(
-#             self.messages
-#             + [
-#                 {
-#                     "role": "system",
-#                     "content": f"Read the above conversation. Then select the next role from {self.agent_names} to play. Only return the role.",
-#                 }
-#             ]
-#         )
-#         if not final:
-#             # i = self._random.randint(0, len(self._agent_names) - 1)  # randomly pick an id
-#             return self.next_agent(last_speaker)
-#         try:
-#             return self.agent_by_name(name)
-#         except ValueError:
-#             return self.next_agent(last_speaker)
+@dataclass
+class ExecutorGroupchat(GroupChat):
+    dedicated_executor: autogen.UserProxyAgent = None
+
+    def select_speaker(
+            self, last_speaker: autogen.ConversableAgent, selector: autogen.ConversableAgent
+    ):
+        """Select the next speaker."""
+
+        try:
+            message = self.messages[-1]
+            if "function_call" in message:
+                return self.dedicated_executor
+        except Exception as e:
+            print(e)
+            pass
+
+        selector.update_system_message(self.select_speaker_msg())
+        final, name = selector.generate_oai_reply(
+            self.messages
+            + [
+                {
+                    "role": "system",
+                    "content": f"Read the above conversation. Then select the next role from {self.agent_names} to play. Only return the role.",
+                }
+            ]
+        )
+        if not final:
+            # i = self._random.randint(0, len(self._agent_names) - 1)  # randomly pick an id
+            return self.next_agent(last_speaker)
+        try:
+            return self.agent_by_name(name)
+        except ValueError:
+            return self.next_agent(last_speaker)
 
 
 # @user_proxy.register_for_execution()
@@ -251,64 +251,56 @@ def config_agents():
         "timeout": 60
     }
 
-    # software_engineer_agent_prompt = '''
-    #     Do not respond as the agent named in the NEXT tag if your name is not in the NEXT tag.
-    #     You are responsible for parsing the output from the entity_extractor_agent and making sure that all the required keys and values
-    #     are there.
-    #     If you find that there are no missing values, then respond with "NEXT: styling_agent",
-    #     otherwise respond with "NEXT: user_proxy" and provide the user_proxy with the list of missing values so that the
-    #     user_proxy can follow up with the human to get the values for those required keys.
-    #     '''
-
     software_engineer_agent_prompt = '''
-            Do not respond as the agent named in the NEXT tag if your name is not in the NEXT tag.
-            You are responsible for parsing the output from the entity_extractor_agent and making sure that all the required keys and values
-            are there.
-            If you find that there are no missing values, then respond with "NEXT: styling_agent", 
-            If there are missing values, then that list of missing values must be sent to user_proxy agent so that the user_proxy can follow up
-            to get values for those required keys.
-            '''
+        You are responsible for parsing the output from the entity_extractor_agent and making sure that all the required keys and values
+        are there.
+        If you find that there are no missing values, then the chat_manager should work with the styling_agent,
+        otherwise you should pass the list of missing values to the user_proxy so that the
+        user_proxy can follow up with the human to get the values for those required keys.
+        '''
+
+    # software_engineer_agent_prompt = '''
+    #         You are responsible for parsing the output from the entity_extractor_agent and making sure that all the required keys and values
+    #         are there.
+    #         If you find that there are no missing values, then respond with "NEXT: styling_agent",
+    #         If there are missing values, then that list of missing values must be sent to user_proxy agent so that the user_proxy can follow up
+    #         to get values for those required keys.
+    #         '''
 
     software_engineer_agent = AssistantAgent(
         name="software_engineer_agent",
         system_message=software_engineer_agent_prompt,
         llm_config=llm_config,
-        # description="""
-        # This agent is responsible for parsing the output from the entity_extractor_agent and making sure that all the required keys and values
-        # are there.
-        # If there are missing values, then that list of missing values must be sent to user_proxy agent so that the user_proxy can follow up
-        # with the human to get values for those required keys.
-        # If there are no missing values, then the chat manager should work with the styling_agent to format the output before terminating the chat.
+        description="""
+        This agent is responsible for parsing the output from the entity_extractor_agent and making sure that all the required keys and values
+        are there.
+        If there are missing values, then that list of missing values must be sent to user_proxy agent so that the user_proxy can follow up
+        with the human to get values for those required keys.
+        If there are no missing values, then the chat manager should work with the styling_agent to format the output before terminating the chat.
         # """
     )
 
     entity_extractor_agent_prompt = '''
-        Do not respond as the agent named in the NEXT tag if your name is not in the NEXT tag.
         You are a helpful assistant that can extract text based entities from call transcripts. 
-        Please note if the software_engineer_agent has performed its work and there are missing values identified, the user_proxy will provide
-        values for those missing values and after those are provided, you should once again extract the entities from the provided
-        call transcript, however, this time, you must replace the missing values with what the user_proxy provided.
-        Once you have completed assisting the user respond with "NEXT: software_engineer_agent"
         '''
 
     entity_extractor_agent = AssistantAgent(
         name="entity_extractor_agent",
         system_message=entity_extractor_agent_prompt,
         llm_config=llm_config,
-        # description='''
-        #  This agent is responsible for extracting entities from call transcripts.
-        #  There are two scenarios where the this agent will extract entities from the provided call transcript:
-        #  1.) When the chat manager is initially sent a request by the user_agent. This is always the first step to occur in the workflow.
-        #  2.) The other time is after the software_engineer_agent has performed its work and there are missing values identified, the human will provide
-        #  values for those missing values and after those are provided, this agent should once again extract the entities from the provided
-        #  call transcript, however, this time, the agent will replace the missing values with what the human provided.
-        #  When this agent completes its task, the chat manager should then work with the software_engineer_agent to see if there are any missing values
-        #  in the extracted entities output.
+        description='''
+         This agent is responsible for extracting entities from call transcripts.
+         There are two scenarios where the this agent will extract entities from the provided call transcript:
+         1.) When the chat manager is initially sent a request by the user_agent. This is always the first step to occur in the workflow.
+         2.) The other time is after the software_engineer_agent has performed its work and there are missing values identified, the human will provide
+         values for those missing values and after those are provided, this agent should once again extract the entities from the provided
+         call transcript, however, this time, the agent will replace the missing values with what the human provided.
+         When this agent completes its task, the chat manager should then work with the software_engineer_agent to see if there are any missing values
+         in the extracted entities output.
         # '''
     )
 
     styling_agent_prompt = '''
-        Do not respond as the agent named in the NEXT tag if your name is not in the NEXT tag.
         This agent is a helpful assistant that can format content to look very pleasing to the user.
         Once you have completed assisting the user output TERMINATE
         '''
@@ -317,9 +309,9 @@ def config_agents():
         name="styling_agent",
         system_message=styling_agent_prompt,
         llm_config=llm_config,
-        # description="""
-        #     This agent is responsible for formatting the final output returned from this group chat. This agent will always be the last agent to run.
-        # """
+        description="""
+            This agent is responsible for formatting the final output returned from this group chat. This agent will always be the last agent to run.
+        """
     )
 
     # description = """
@@ -334,8 +326,6 @@ def config_agents():
         name="user_proxy",
         system_message="""
             A human that will provide the necessary information to the group chat manager. Execute suggested function calls.
-            If the "user" ever provides you missing information, then respond with 'NEXT: entity_extractor_agent' and 
-            be sure to pass the value the "user" provided to the entity_extractor_agent.
             """,
         function_map={
             "extract_entities": extract_entities,
@@ -348,28 +338,12 @@ def config_agents():
 
     )
 
-    speaker_transitions_dict = {
-        entity_extractor_agent: [software_engineer_agent, user_proxy],
-        software_engineer_agent: [styling_agent, user_proxy],
-        user_proxy: [entity_extractor_agent, software_engineer_agent, styling_agent],
-    }
 
-
-    # groupchat = ExecutorGroupchat(
-    #     agents=[user_proxy, entity_extractor_agent, software_engineer_agent, styling_agent],
-    #     messages=[],
-    #     max_round=20,
-    #     allowed_or_disallowed_speaker_transitions=speaker_transitions_dict,
-    #     speaker_transitions_type="allowed",
-    #     dedicated_executor=user_proxy)
-
-    groupchat = GroupChat(
+    groupchat = ExecutorGroupchat(
         agents=[user_proxy, entity_extractor_agent, software_engineer_agent, styling_agent],
         messages=[],
         max_round=20,
-        allowed_or_disallowed_speaker_transitions=speaker_transitions_dict,
-        speaker_transitions_type="allowed",
-    )
+        dedicated_executor=user_proxy)
 
     manager = autogen.GroupChatManager(groupchat=groupchat, code_execution_config=False, llm_config=llm_config_short)
 
