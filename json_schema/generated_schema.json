@@ -1,0 +1,222 @@
+{
+  "$defs": {
+    "ContactType": {
+      "enum": [
+        "Phone",
+        "Text"
+      ],
+      "title": "ContactType",
+      "type": "string"
+    },
+    "CustomerNeed": {
+      "enum": [
+        "Complete purchase support",
+        "Technical support",
+        "Membership management",
+        "Other"
+      ],
+      "title": "CustomerNeed",
+      "type": "string"
+    },
+    "CustomerSentimentGoingIn": {
+      "enum": [
+        "Positive",
+        "Negative",
+        "Neutral"
+      ],
+      "title": "CustomerSentimentGoingIn",
+      "type": "string"
+    },
+    "CustomerSentimentGoingOut": {
+      "enum": [
+        "Positive",
+        "Negative",
+        "Neutral"
+      ],
+      "title": "CustomerSentimentGoingOut",
+      "type": "string"
+    },
+    "EmployeeResponse": {
+      "enum": [
+        "Added protection plan to product",
+        "Engaged manager or support",
+        "Fixed in the moment",
+        "Gave recommendation or advice",
+        "Started remote support session",
+        "Unable to resolve to satisfaction",
+        "Canceled membership",
+        "Explained membership benefits",
+        "Referred to other team - unable to help",
+        "Renewed membership",
+        "Other"
+      ],
+      "title": "EmployeeResponse",
+      "type": "string"
+    },
+    "GiftCard": {
+      "properties": {
+        "giftCardOffered": {
+          "title": "Was a gift card offered to the customer?",
+          "type": "boolean"
+        },
+        "giftCardAmount": {
+          "title": "Dollar amount of the gift card offered",
+          "type": "string"
+        },
+        "giftCardAccepted": {
+          "title": "If gift card was offered, did the customer accept the gift card?",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "giftCardOffered",
+        "giftCardAmount",
+        "giftCardAccepted"
+      ],
+      "title": "GiftCard",
+      "type": "object"
+    }
+  },
+  "description": "Information about the Customer's Case Conversation ",
+  "properties": {
+    "summary": {
+      "title": "A detailed summary of the entire call transcript. Be sure to include why the customer was calling and if the customers issue was resolved, please provide those details in your summary. Do not use the customer or agents actual name in the summary, just refer to them as either \"Agent\" or \"Customer\"!",
+      "type": "string"
+    },
+    "requiredElements": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Any elements that are explicitly called out in the transcript as being required"
+    },
+    "orderNumber": {
+      "title": "The customer's order number",
+      "type": "string"
+    },
+    "productSKU": {
+      "title": "The SKU associated to the product the customer might be calling about. Do not include product brand, make or model in this value.",
+      "type": "string"
+    },
+    "driver": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "A name or description that could be used to identify the individual delivering and/or doing service at the customer's house"
+    },
+    "photos": {
+      "title": "where photos captured at the customer's house showing damage or product condition?",
+      "type": "boolean"
+    },
+    "agentCall": {
+      "title": "Did the agent or delivery person make a call while at the customer's house?",
+      "type": "boolean"
+    },
+    "contactType": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ContactType"
+        }
+      ],
+      "title": "Contact Channel"
+    },
+    "productSafetyFlag": {
+      "title": "Is there a product safety concern?",
+      "type": "boolean"
+    },
+    "customerNeed": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CustomerNeed"
+        }
+      ],
+      "title": "Customer Need"
+    },
+    "employeeResponse": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/EmployeeResponse"
+        }
+      ],
+      "title": "Employee Response"
+    },
+    "customerSentimentGoingIn": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CustomerSentimentGoingIn"
+        }
+      ],
+      "title": "The customer's sentiment going into the conversation with agent"
+    },
+    "customerSentimentGoingOut": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CustomerSentimentGoingOut"
+        }
+      ],
+      "title": "The customer's sentiment at the end of the conversation with agent"
+    },
+    "agentName": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "The name of the agent"
+    },
+    "customerName": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "The name of the customer"
+    },
+    "giftCards": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/GiftCard"
+        }
+      ],
+      "title": "Were gift cards offered and if so, were they accepted by the customer?"
+    }
+  },
+  "required": [
+    "summary",
+    "orderNumber",
+    "productSKU",
+    "photos",
+    "agentCall",
+    "contactType",
+    "productSafetyFlag",
+    "customerNeed",
+    "employeeResponse",
+    "customerSentimentGoingIn",
+    "customerSentimentGoingOut",
+    "giftCards"
+  ],
+  "title": "CaseSchema",
+  "type": "object"
+}

@@ -1,0 +1,25 @@
+{
+  "summary": "Customer called to inquire about a specific type of printer and was provided with the phone number of the right department. The customer had previously been on hold and got disconnected. The agent offered a $20 gift card for the trouble, which the customer declined.",
+  "requiredElements": [
+    "orderNumber",
+    "productSKU"
+  ],
+  "orderNumber": "12345",
+  "productSKU": "76543",
+  "driver": "",
+  "photos": false,
+  "agentCall": true,
+  "contactType": "Phone",
+  "productSafetyFlag": false,
+  "customerNeed": "Complete purchase support",
+  "employeeResponse": "Referred to other team - unable to help",
+  "customerSentimentGoingIn": "Neutral",
+  "customerSentimentGoingOut": "Neutral",
+  "agentName": "Valerie",
+  "customerName": "",
+  "giftCards": {
+    "giftCardOffered": true,
+    "giftCardAmount": "20",
+    "giftCardAccepted": false
+  }
+}

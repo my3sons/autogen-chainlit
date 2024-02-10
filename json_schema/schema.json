@@ -1,0 +1,99 @@
+{
+   "title":"Case Schema",
+   "required":[
+      "contactType",
+      "productSafteyFlag",
+      "customerNeed",
+      "employeeResponse"
+   ],
+   "properties":{
+      "contactType":{
+         "title":"Contact Channel",
+         "type":"string",
+         "enum":[
+            "Phone",
+            "Text"
+         ]
+      },
+      "productSafetyFlag":{
+         "type":"boolean",
+         "title":"Is there a product safety concern?"
+      },
+      "customerNeed":{
+         "title":"Customer Need",
+         "type":"string",
+         "enum":[
+            "Complete purchase support",
+            "Technical support",
+            "Membership management",
+            "Other"
+         ]
+      },
+      "employeeResponse":{
+         "title":"Employee Response",
+         "type":"string",
+         "enum":[
+            "Added protection plan to product",
+            "Engaged manager or support",
+            "Fixed in the moment",
+            "Gave recommendation or advice",
+            "Started remote support session",
+            "Unable to resolve to satisfaction",
+            "Canceled membership",
+            "Explained membership benefits",
+            "Referred to other team - unable to help",
+            "Renewed membership",
+            "Other"
+         ]
+      },
+      "customerSentimentGoingIn":{
+         "title":"The customer's sentiment going into the conversation with agent",
+         "type":"string",
+         "enum":[
+            "Positive",
+            "Negative",
+            "Neutral"
+         ]
+      },
+      "customerSentimentGoingOut":{
+         "title":"The customer's sentiment at the end of the conversation with agent",
+         "type":"string",
+         "enum":[
+            "Positive",
+            "Negative",
+            "Neutral"
+         ]
+      },
+      "GiftCard": {
+         "properties": {
+           "giftCardOffered": {
+             "title": "Was a gift card offered to the customer?",
+             "type": "boolean"
+           },
+           "giftCardAmount": {
+             "title": "Dollar amount of the gift card offered",
+             "type": "string"
+           },
+           "giftCardAccepted": {
+             "title": "If gift card was offered, did the customer accept the gift card?",
+             "type": "boolean"
+           }
+         },
+         "required": [
+           "giftCardOffered",
+           "giftCardAmount",
+           "giftCardAccepted"
+         ],
+         "title": "GiftCard",
+         "type": "object"
+      },
+      "agentName":{
+         "title":"The name of the agent",
+         "type":"string"
+      },
+      "customerName":{
+         "title":"The name of the customer",
+         "type":"string"
+      }
+   }
+}

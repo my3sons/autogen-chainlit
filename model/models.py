@@ -57,8 +57,7 @@ class CaseSchema(BaseModel):
                                 title="Any elements that are explicitly called out in the transcript as being required")
     orderNumber: str = Field(..., title="The customer's order number")
     productSKU: str = Field(..., title="The SKU associated to the product the customer might be calling about. Do not include product brand, make or model in this value.")
-    driver: Optional[str] = Field(None,
-                        title="A name or description that could be used to identify the individual delivering and/or doing service at the customer's house")
+    driver: str = Field(description="A name or description that could be used to identify the individual delivering and/or doing service at the customer's house")
     photos: bool = Field(...,
                          title="where photos captured at the customer's house showing damage or product condition?")
     agentCall: bool = Field(..., title="Did the agent or delivery person make a call while at the customer's house?")
