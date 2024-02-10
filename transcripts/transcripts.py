@@ -8,7 +8,7 @@ call_transcript_1 = {
     }, {
         "source": "customer",
         "timestamp": "2024-01-17T18:26:27.609811",
-        "message": "No. Yes, I just I'm sorry I think I was in the wrong department I need to talk to somebody about printer I bought, the order number is 12345 and the productSKU is abcd."
+        "message": "No. Yes, I just I'm sorry I think I was in the wrong department I need to talk to somebody about printer I bought, the order number is 12345."
     }, {
         "source": "agent",
         "timestamp": "2024-01-17T18:26:33.117753",

@@ -189,7 +189,7 @@ def find_missing_values(extract_entities_output: Annotated[str, "The JSON object
 def config_agents():
     llm_config = {
         "config_list": config_list,
-        "seed": None,
+        "seed": 41,
         "temperature": 0,
         "timeout": 60,
         "functions": [
@@ -210,7 +210,7 @@ def config_agents():
                 }
             },
             {
-                "description": "Function to be called to determine if there are missing values from the response returned by the extract_entities function. If there are missing values, then that list should be sent to the user_proxy for follow up with the human.",
+                "description": "Function to be called to determine if there are missing values from the response returned by the extract_entities function. ",
                 "name": "find_missing_values",
                 "parameters": {
                     "type": "object",
@@ -225,94 +225,120 @@ def config_agents():
                     ]
                 }
             },
-            {
-                "description": "Function to be called when content needs to be formatted to look nice.",
-                "name": "style_output",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "input_json": {
-                            "type": "string",
-                            "description": "The JSON string to be formatted"
-                        }
-                    },
-                    "required": [
-                        "input_json"
-                    ]
-                }
-            }
+            # {
+            #     "description": "Function to be called when content needs to be formatted to look nice.",
+            #     "name": "style_output",
+            #     "parameters": {
+            #         "type": "object",
+            #         "properties": {
+            #             "input_json": {
+            #                 "type": "string",
+            #                 "description": "The JSON string to be formatted"
+            #             }
+            #         },
+            #         "required": [
+            #             "input_json"
+            #         ]
+            #     }
+            # }
         ]
     }
 
     llm_config_short = {
         "config_list": config_list,
-        "seed": None,
+        "seed": 41,
         "temperature": 0,
         "timeout": 60
     }
 
-    software_engineer_agent_prompt = '''
-        You are responsible for parsing the output from the entity_extractor_agent and making sure that all the required keys and values
-        are there.
-        If you find that there are no missing values, then the chat_manager should work with the styling_agent,
-        otherwise you should pass the list of missing values to the user_proxy so that the
-        user_proxy can follow up with the human to get the values for those required keys.
-        '''
+    def print_messages(recipient, messages, sender, config):
+        if "callback" in config and config["callback"] is not None:
+            callback = config["callback"]
+            callback(sender, recipient, messages[-1])
+        print(f"Messages sent to: {recipient.name} from {sender.name}| message: {messages[-1]}")
+        return False, None  # required to ensure the agent communication flow continues
 
-    # software_engineer_agent_prompt = '''
-    #         You are responsible for parsing the output from the entity_extractor_agent and making sure that all the required keys and values
-    #         are there.
-    #         If you find that there are no missing values, then respond with "NEXT: styling_agent",
-    #         If there are missing values, then that list of missing values must be sent to user_proxy agent so that the user_proxy can follow up
-    #         to get values for those required keys.
+    # entity_extractor_agent_prompt = '''
+    #         You are a helpful assistant that can extract text based entities from call transcripts. Do not ask the User for feedback. Once you are done,
+    #         the next agent to be called is the software_engineer_agent.
     #         '''
 
-    software_engineer_agent = AssistantAgent(
-        name="software_engineer_agent",
-        system_message=software_engineer_agent_prompt,
-        llm_config=llm_config,
-        description="""
-        This agent is responsible for parsing the output from the entity_extractor_agent and making sure that all the required keys and values
-        are there.
-        If there are missing values, then that list of missing values must be sent to user_proxy agent so that the user_proxy can follow up
-        with the human to get values for those required keys.
-        If there are no missing values, then the chat manager should work with the styling_agent to format the output before terminating the chat.
-        # """
-    )
-
     entity_extractor_agent_prompt = '''
-        You are a helpful assistant that can extract text based entities from call transcripts. 
-        '''
+            You are a helpful assistant that has strong Python skills and knows how to use Python to extract text based entities from call transcripts.
+            Do not ask any questions. 
+            '''
 
-    entity_extractor_agent = AssistantAgent(
+    entity_extractor_agent = ChainlitAssistantAgent(
         name="entity_extractor_agent",
         system_message=entity_extractor_agent_prompt,
         llm_config=llm_config,
         description='''
-         This agent is responsible for extracting entities from call transcripts.
-         There are two scenarios where the this agent will extract entities from the provided call transcript:
-         1.) When the chat manager is initially sent a request by the user_agent. This is always the first step to occur in the workflow.
-         2.) The other time is after the software_engineer_agent has performed its work and there are missing values identified, the human will provide
-         values for those missing values and after those are provided, this agent should once again extract the entities from the provided
-         call transcript, however, this time, the agent will replace the missing values with what the human provided.
-         When this agent completes its task, the chat manager should then work with the software_engineer_agent to see if there are any missing values
-         in the extracted entities output.
-        # '''
+         This agent has strong Python skills and is responsible for extracting entities from call transcripts. 
+        '''
     )
 
+    # entity_extractor_agent.register_reply(
+    #     [autogen.Agent, None],
+    #     reply_func=print_messages,
+    #     config={"callback": None},
+    # )
+
+    # software_engineer_agent_prompt = '''
+    #     You are responsible for parsing the output from the entity_extractor_agent and making sure that all the required keys and values
+    #     are there.
+    #     If you find that there are no missing values, then the next agent to be called is the styling_agent,
+    #     otherwise you should pass the list of missing values to the user_proxy so that the
+    #     user_proxy can follow up with the human to get the values for those required keys.
+    #     '''
+
+    software_engineer_agent_prompt = '''
+            You are a helpful assistant that has strong Python skills and is primarily responsible for analyzing the output from the entity_extractor_agent 
+            to determine if there are any required fields that are missing values in the output.
+            Do not ask any questions and specifically do not ask if further assistance is required. Just do your work and move on!
+            '''
+
+    software_engineer_agent = ChainlitAssistantAgent(
+        name="software_engineer_agent",
+        system_message=software_engineer_agent_prompt,
+        llm_config=llm_config,
+        description="""
+        This agent is responsible for a couple different things. Firstly, once the entity_extractor_agent is finished, 
+        this agent is responsible for determining if there are any required fields that are missing values. If there are
+        missing fields, then those missing fields should be given to the user_proxy for human feedback. Once this feedback
+        is provided, this agent is then responsible for updating the output with values provided by the human.
+        Once all the required values are provided, the chat_manager needs to work with the styling_agent to generate
+        the final output.
+        """
+    )
+
+    # software_engineer_agent.register_reply(
+    #     [autogen.Agent, None],
+    #     reply_func=print_messages,
+    #     config={"callback": None},
+    # )
+
     styling_agent_prompt = '''
-        This agent is a helpful assistant that can format content to look very pleasing to the user.
+        You are a helpful assistant who is an expert in using Python to take in a JSON object and then generate 
+        output that is both pleasing to the eye and useful for the end user.
+        Create both a JSON and markdown version of the output.
         Once you have completed assisting the user output TERMINATE
         '''
 
-    styling_agent = AssistantAgent(
+    styling_agent = ChainlitAssistantAgent(
         name="styling_agent",
         system_message=styling_agent_prompt,
         llm_config=llm_config,
         description="""
-            This agent is responsible for formatting the final output returned from this group chat. This agent will always be the last agent to run.
+            This agent is responsible for working with the user_proxy at the very end to generate the final output that 
+            will be presented to the end user.
         """
     )
+
+    # styling_agent.register_reply(
+    #     [autogen.Agent, None],
+    #     reply_func=print_messages,
+    #     config={"callback": None},
+    # )
 
     # description = """
     #            This agent is responsible for formatting the final output returned from this group chat. This agent will always be the last agent to run and should only run only run under the following scenarios:
@@ -325,18 +351,24 @@ def config_agents():
     user_proxy = ChainlitUserProxyAgent(
         name="user_proxy",
         system_message="""
-            A human that will provide the necessary information to the group chat manager. Execute suggested function calls.
+            A human admin that can execute code (for the styling_agent) and function calls and report back the execution results, as well as gather feedback from the human as necessary.
             """,
         function_map={
             "extract_entities": extract_entities,
             "find_missing_values": find_missing_values,
-            "style_output": style_output,
+            # "style_output": style_output,
         },
         is_termination_msg=lambda msg: "TERMINATE" in msg["content"],
         code_execution_config={"work_dir": "groupchat", "use_docker": False},
         human_input_mode="ALWAYS",
 
     )
+
+    # user_proxy.register_reply(
+    #     [autogen.Agent, None],
+    #     reply_func=print_messages,
+    #     config={"callback": None},
+    # )
 
 
     groupchat = ExecutorGroupchat(

@@ -189,7 +189,7 @@ def find_missing_values(extract_entities_output: Annotated[str, "The JSON object
 def config_agents():
     llm_config = {
         "config_list": config_list,
-        "seed": None,
+        "seed": 41,
         "temperature": 0,
         "timeout": 60,
         "functions": [
@@ -246,7 +246,7 @@ def config_agents():
 
     llm_config_short = {
         "config_list": config_list,
-        "seed": None,
+        "seed": 41,
         "temperature": 0,
         "timeout": 60
     }
@@ -330,13 +330,18 @@ def config_agents():
     #            provided by the human. Only then can this agent do its thing.
     #        """
 
+    assistant = autogen.ConversableAgent(name="assistant",
+                                         system_message=f"You are an AI assistant. You can ask for help from a human expert using the ask_human_expert function.",
+                                         llm_config=llm_config)
+    #user_proxy = autogen.UserProxyAgent(name="user_proxy")
+
     user_proxy = ChainlitUserProxyAgent(
         name="user_proxy",
         system_message="""
-            A human that will provide the necessary information to the group chat manager. Execute suggested function calls.
-            If the "user" ever provides you missing information, then respond with 'NEXT: entity_extractor_agent' and 
-            be sure to pass the value the "user" provided to the entity_extractor_agent.
-            """,
+               A human that will provide the necessary information to the group chat manager. Execute suggested function calls.
+               If the "user" ever provides you missing information, then respond with 'NEXT: entity_extractor_agent' and
+               be sure to pass the value the "user" provided to the entity_extractor_agent.
+               """,
         function_map={
             "extract_entities": extract_entities,
             "find_missing_values": find_missing_values,
@@ -344,14 +349,29 @@ def config_agents():
         },
         is_termination_msg=lambda msg: "TERMINATE" in msg["content"],
         code_execution_config={"work_dir": "groupchat", "use_docker": False},
-        human_input_mode="ALWAYS",
+        human_input_mode="TERMINATE",
 
     )
 
+    @assistant.register_for_llm(description="Function for asking human expert.")
+    @user_proxy.register_for_execution()
+    def ask_human_expert(question: Annotated[str, "The question you want to ask the human expert."]) -> Annotated[
+        str, "Answer"]:
+        answer = input(f"Please answer the question: {question}\n")
+        return answer
+
+
+
+    # speaker_transitions_dict = {
+    #     entity_extractor_agent: [software_engineer_agent, user_proxy],
+    #     software_engineer_agent: [styling_agent, user_proxy],
+    #     user_proxy: [entity_extractor_agent, software_engineer_agent, styling_agent],
+    # }
+
     speaker_transitions_dict = {
-        entity_extractor_agent: [software_engineer_agent, user_proxy],
+        entity_extractor_agent: [software_engineer_agent],
         software_engineer_agent: [styling_agent, user_proxy],
-        user_proxy: [entity_extractor_agent, software_engineer_agent, styling_agent],
+        user_proxy: [entity_extractor_agent]
     }
 
 
