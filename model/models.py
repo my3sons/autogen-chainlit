@@ -44,33 +44,54 @@ class CustomerSentimentGoingOut(Enum):
 
 
 class GiftCard(BaseModel):
-    giftCardOffered: bool = Field(..., title="Was a gift card offered to the customer?")
-    giftCardAmount: str = Field(..., title="Dollar amount of the gift card offered")
-    giftCardAccepted: bool = Field(..., title="If gift card was offered, did the customer accept the gift card?")
+    giftCardOffered: bool = Field(description="Was a gift card offered to the customer?")
+    giftCardAmount: str = Field(description="Dollar amount of the gift card offered")
+    giftCardAccepted: bool = Field(description="If gift card was offered, did the customer accept the gift card?")
 
 
+# class CaseSchema(BaseModel):
+#     """ Information about the Customer's Case Conversation """
+#     summary: str = Field(...,
+#                          title='A detailed summary of the entire call transcript. Be sure to include why the customer was calling and if the customers issue was resolved, please provide those details in your summary. Do not use the customer or agents actual name in the summary, just refer to them as either "Agent" or "Customer"!')
+#     requiredElements: Optional[List[str]] = Field(None,
+#                                 title="Any elements that are explicitly called out in the transcript as being required")
+#     orderNumber: str = Field(..., title="The customer's order number")
+#     productSKU: str = Field(..., title="The SKU associated to the product the customer might be calling about. Do not include product brand, make or model in this value.")
+#     driver: str = Field(description="A name or description that could be used to identify the individual delivering and/or doing service at the customer's house")
+#     photos: bool = Field(...,
+#                          title="where photos captured at the customer's house showing damage or product condition?")
+#     agentCall: bool = Field(..., title="Did the agent or delivery person make a call while at the customer's house?")
+#     contactType: ContactType = Field(..., title='Contact Channel')
+#     productSafetyFlag: bool = Field(..., title='Is there a product safety concern?')
+#     customerNeed: CustomerNeed = Field(..., title='Customer Need')
+#     employeeResponse: EmployeeResponse = Field(..., title='Employee Response')
+#     customerSentimentGoingIn: CustomerSentimentGoingIn = Field(...,
+#                                                                title="The customer's sentiment going into the conversation with agent")
+#     customerSentimentGoingOut: CustomerSentimentGoingOut = Field(...,
+#                                                                  title="The customer's sentiment at the end of the conversation with agent")
+#     agentName: Optional[str] = Field(None, title='The name of the agent')
+#     customerName: Optional[str] = Field(None, title='The name of the customer')
+#     giftCards: GiftCard = Field(..., title="Were gift cards offered and if so, were they accepted by the customer?")
+#
 class CaseSchema(BaseModel):
     """ Information about the Customer's Case Conversation """
     summary: str = Field(...,
-                         title='A detailed summary of the entire call transcript. Be sure to include why the customer was calling and if the customers issue was resolved, please provide those details in your summary. Do not use the customer or agents actual name in the summary, just refer to them as either "Agent" or "Customer"!')
+                         description='A detailed summary of the entire call transcript. Be sure to include why the customer was calling and if the customers issue was resolved and any other details that are worth mentioning. Do not use the customer or agents actual name in the summary, just refer to them as either "Agent" or "Customer"!')
     requiredElements: Optional[List[str]] = Field(None,
-                                title="Any elements that are explicitly called out in the transcript as being required")
-    orderNumber: str = Field(..., title="The customer's order number")
-    productSKU: str = Field(..., title="The SKU associated to the product the customer might be calling about. Do not include product brand, make or model in this value.")
+                                description="Any elements that are explicitly called out in the transcript as being required")
+    orderNumber: str = Field(default="", description="The customer's order number")
+    productSKU: str = Field(default="", description="The SKU value associated to the product the customer might be calling about. The SKU is a string of consecutive characters and/or digits. It is not the brand, make, or model of the product.")
     driver: str = Field(description="A name or description that could be used to identify the individual delivering and/or doing service at the customer's house")
-    photos: bool = Field(...,
-                         title="where photos captured at the customer's house showing damage or product condition?")
-    agentCall: bool = Field(..., title="Did the agent or delivery person make a call while at the customer's house?")
-    contactType: ContactType = Field(..., title='Contact Channel')
-    productSafetyFlag: bool = Field(..., title='Is there a product safety concern?')
-    customerNeed: CustomerNeed = Field(..., title='Customer Need')
-    employeeResponse: EmployeeResponse = Field(..., title='Employee Response')
-    customerSentimentGoingIn: CustomerSentimentGoingIn = Field(...,
-                                                               title="The customer's sentiment going into the conversation with agent")
-    customerSentimentGoingOut: CustomerSentimentGoingOut = Field(...,
-                                                                 title="The customer's sentiment at the end of the conversation with agent")
-    agentName: Optional[str] = Field(None, title='The name of the agent')
-    customerName: Optional[str] = Field(None, title='The name of the customer')
-    giftCards: GiftCard = Field(..., title="Were gift cards offered and if so, were they accepted by the customer?")
+    photos: bool = Field(description="where photos captured at the customer's house showing damage or product condition?")
+    agentCall: bool = Field(description="Did the agent or delivery person make a call while at the customer's house?")
+    contactType: ContactType = Field(..., description='Contact Channel')
+    productSafetyFlag: bool = Field(description='Is there a product safety concern?')
+    customerNeed: CustomerNeed = Field(..., description='Customer Need')
+    employeeResponse: EmployeeResponse = Field(..., description='Employee Response')
+    customerSentimentGoingIn: CustomerSentimentGoingIn = Field(description="The customer's sentiment going into the conversation with agent")
+    customerSentimentGoingOut: CustomerSentimentGoingOut = Field(description="The customer's sentiment at the end of the conversation with agent")
+    agentName: Optional[str] = Field(None, description='The name of the agent')
+    customerName: Optional[str] = Field(None, description='The name of the customer')
+    giftCards: Optional[GiftCard] = Field(None, description="Were gift cards offered and if so, how much, and were they accepted by the customer?")
 
 # End Pydantic Models

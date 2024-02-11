@@ -1,25 +1,20 @@
 {
-  "summary": "Customer called to inquire about a specific type of printer and was provided with the phone number of the right department. The customer had previously been on hold and got disconnected. The agent offered a $20 gift card for the trouble, which the customer declined.",
-  "requiredElements": [
-    "orderNumber",
-    "productSKU"
-  ],
+  "summary": "The customer called Geek Squad to discuss an issue with a printer they purchased, but they were initially connected to the wrong department. The customer provided their order number (12345) but did not give their full name or phone number when asked. The agent from computing services attempted to redirect the customer to the appropriate department and offered a $20 gift card for the trouble, which the customer declined. The agent then informed the customer that all agents were busy and asked them to hold. The customer's issue was not resolved during this call.",
+  "requiredElements": ["orderNumber", "productSKU"],
   "orderNumber": "12345",
-  "productSKU": "76543",
+  "productSKU": "123456789",
   "driver": "",
   "photos": false,
-  "agentCall": true,
+  "agentCall": false,
   "contactType": "Phone",
   "productSafetyFlag": false,
-  "customerNeed": "Complete purchase support",
+  "customerNeed": "Other",
   "employeeResponse": "Referred to other team - unable to help",
   "customerSentimentGoingIn": "Neutral",
   "customerSentimentGoingOut": "Neutral",
-  "agentName": "Valerie",
-  "customerName": "",
   "giftCards": {
     "giftCardOffered": true,
-    "giftCardAmount": "20",
+    "giftCardAmount": "$20",
     "giftCardAccepted": false
   }
 }

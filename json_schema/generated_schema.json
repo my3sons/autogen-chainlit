@@ -80,7 +80,8 @@
   "description": "Information about the Customer's Case Conversation ",
   "properties": {
     "summary": {
-      "title": "A detailed summary of the entire call transcript. Be sure to include why the customer was calling and if the customers issue was resolved, please provide those details in your summary. Do not use the customer or agents actual name in the summary, just refer to them as either \"Agent\" or \"Customer\"!",
+      "description": "A detailed summary of the entire call transcript. Be sure to include why the customer was calling and if the customers issue was resolved and any other details that are worth mentioning. Do not use the customer or agents actual name in the summary, just refer to them as either \"Agent\" or \"Customer\"!",
+      "title": "Summary",
       "type": "string"
     },
     "requiredElements": {
@@ -96,34 +97,34 @@
         }
       ],
       "default": null,
-      "title": "Any elements that are explicitly called out in the transcript as being required"
+      "description": "Any elements that are explicitly called out in the transcript as being required",
+      "title": "Requiredelements"
     },
     "orderNumber": {
-      "title": "The customer's order number",
+      "default": "",
+      "description": "The customer's order number",
+      "title": "Ordernumber",
       "type": "string"
     },
     "productSKU": {
-      "title": "The SKU associated to the product the customer might be calling about. Do not include product brand, make or model in this value.",
+      "default": "",
+      "description": "The SKU value associated to the product the customer might be calling about. The SKU is a string of consecutive characters and/or digits. It is not the brand, make, or model of the product.",
+      "title": "Productsku",
       "type": "string"
     },
     "driver": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "A name or description that could be used to identify the individual delivering and/or doing service at the customer's house"
+      "description": "A name or description that could be used to identify the individual delivering and/or doing service at the customer's house",
+      "title": "Driver",
+      "type": "string"
     },
     "photos": {
-      "title": "where photos captured at the customer's house showing damage or product condition?",
+      "description": "where photos captured at the customer's house showing damage or product condition?",
+      "title": "Photos",
       "type": "boolean"
     },
     "agentCall": {
-      "title": "Did the agent or delivery person make a call while at the customer's house?",
+      "description": "Did the agent or delivery person make a call while at the customer's house?",
+      "title": "Agentcall",
       "type": "boolean"
     },
     "contactType": {
@@ -132,10 +133,11 @@
           "$ref": "#/$defs/ContactType"
         }
       ],
-      "title": "Contact Channel"
+      "description": "Contact Channel"
     },
     "productSafetyFlag": {
-      "title": "Is there a product safety concern?",
+      "description": "Is there a product safety concern?",
+      "title": "Productsafetyflag",
       "type": "boolean"
     },
     "customerNeed": {
@@ -144,7 +146,7 @@
           "$ref": "#/$defs/CustomerNeed"
         }
       ],
-      "title": "Customer Need"
+      "description": "Customer Need"
     },
     "employeeResponse": {
       "allOf": [
@@ -152,7 +154,7 @@
           "$ref": "#/$defs/EmployeeResponse"
         }
       ],
-      "title": "Employee Response"
+      "description": "Employee Response"
     },
     "customerSentimentGoingIn": {
       "allOf": [
@@ -160,7 +162,7 @@
           "$ref": "#/$defs/CustomerSentimentGoingIn"
         }
       ],
-      "title": "The customer's sentiment going into the conversation with agent"
+      "description": "The customer's sentiment going into the conversation with agent"
     },
     "customerSentimentGoingOut": {
       "allOf": [
@@ -168,7 +170,7 @@
           "$ref": "#/$defs/CustomerSentimentGoingOut"
         }
       ],
-      "title": "The customer's sentiment at the end of the conversation with agent"
+      "description": "The customer's sentiment at the end of the conversation with agent"
     },
     "agentName": {
       "anyOf": [
@@ -180,7 +182,8 @@
         }
       ],
       "default": null,
-      "title": "The name of the agent"
+      "description": "The name of the agent",
+      "title": "Agentname"
     },
     "customerName": {
       "anyOf": [
@@ -192,21 +195,25 @@
         }
       ],
       "default": null,
-      "title": "The name of the customer"
+      "description": "The name of the customer",
+      "title": "Customername"
     },
     "giftCards": {
-      "allOf": [
+      "anyOf": [
         {
           "$ref": "#/$defs/GiftCard"
+        },
+        {
+          "type": "null"
         }
       ],
-      "title": "Were gift cards offered and if so, were they accepted by the customer?"
+      "default": null,
+      "description": "Were gift cards offered and if so, how much, and were they accepted by the customer?"
     }
   },
   "required": [
     "summary",
-    "orderNumber",
-    "productSKU",
+    "driver",
     "photos",
     "agentCall",
     "contactType",
@@ -214,8 +221,7 @@
     "customerNeed",
     "employeeResponse",
     "customerSentimentGoingIn",
-    "customerSentimentGoingOut",
-    "giftCards"
+    "customerSentimentGoingOut"
   ],
   "title": "CaseSchema",
   "type": "object"

@@ -320,7 +320,8 @@ def config_agents():
     styling_agent_prompt = '''
         You are a helpful assistant who is an expert in using Python to take in a JSON object and then generate 
         output that is both pleasing to the eye and useful for the end user.
-        Create both a JSON and markdown version of the output.
+        Create both a JSON and markdown version of the output. The conent of the markdown version should align with 
+        what is in the JSON output.
         After the user_proxy agent has generated the final output and you have confirmed the content, output TERMINATE
         '''
 
