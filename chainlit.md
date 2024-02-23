@@ -1,10 +1,14 @@
+# Welcome to Chainlit! 🚀🤖
 
-# Welcome to the Best Buy Services Call Center AI Agent Team!
+Hi there, Developer! 👋 We're excited to have you on board. Chainlit is a powerful tool designed to help you prototype, debug and share applications built on top of LLMs.
 
-We are here to process your support call transcripts and answer any questions you may have related to those transcripts.
+## Useful Links 🔗
 
-## Tools
+- **Documentation:** Get started with our comprehensive [Chainlit Documentation](https://docs.chainlit.io) 📚
+- **Discord Community:** Join our friendly [Chainlit Discord](https://discord.gg/k73SQ3FyUh) to ask questions, share your projects, and connect with other developers! 💬
 
-- **Chainlit:** Used to create the chatbot you see here. [Chainlit Documentation](https://docs.chainlit.io)
-- **Autogen:** The framework used to build our team of AI capable Agents [Autogen Documentation](https://microsoft.github.io/autogen/docs/Getting-Started)
-- **Langchain:** Provides tools and other AI capabilities that our Agents use to better serve you. [LangChain Documentation](https://python.langchain.com/docs/get_started/introduction)
+We can't wait to see what you create with Chainlit! Happy coding! 💻😊
+
+## Welcome screen
+
+To modify the welcome screen, edit the `chainlit.md` file at the root of your project. If you do not want a welcome screen, just leave this file empty.

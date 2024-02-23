@@ -1,9 +1,9 @@
-#from autogen.agentchat import Agent, AssistantAgent, UserProxyAgent
-import autogen  # noqa E402
-from autogen.agentchat.assistant_agent import AssistantAgent  # noqa E402
-from autogen.agentchat.groupchat import GroupChat, Agent  # noqa E402
-from typing import Dict, Optional, Union, Callable
+from typing import Dict, Optional, Union
+
+
+from autogen import Agent, AssistantAgent, UserProxyAgent, config_list_from_json
 import chainlit as cl
+
 
 async def ask_helper(func, **kwargs):
     res = await func(**kwargs).send()
@@ -35,12 +35,13 @@ class ChainlitAssistantAgent(AssistantAgent):
             request_reply=request_reply,
             silent=silent,
         )
-        
-class ChainlitUserProxyAgent(autogen.UserProxyAgent):
+
+class ChainlitUserProxyAgent(UserProxyAgent):
     """
     Wrapper for AutoGens UserProxy Agent. Simplifies the UI by adding CL Actions.
     """
     def get_human_input(self, prompt: str) -> str:
+        print(f"UP Prompt: {prompt}")
         if prompt.startswith(
             "Provide feedback to chat_manager. Press enter to skip and use auto-reply"
         ):
@@ -60,7 +61,7 @@ class ChainlitUserProxyAgent(autogen.UserProxyAgent):
             if res.get("value") == "exit":
                 return "exit"
 
-        reply = cl.run_sync(ask_helper(cl.AskUserMessage, content=prompt, timeout=60))
+        reply = cl.run_sync(ask_helper(cl.AskUserMessage, content=prompt, timeout=180))
 
         return reply["output"].strip()
 

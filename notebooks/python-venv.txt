@@ -1,4 +1,4 @@
-virtualenv -p /usr/local/bin/python3.9 venv --prompt="transcript_agents"
+virtualenv -p /usr/local/bin/python3.9 venv --prompt="langchain_extractor"
 source venv/bin/activate
 python3 -m pip install -r requirements.txt
 
@@ -13,8 +13,6 @@ If error like the following:
   warnings.warn(
 
 Then do:
-
-
 brew install openssl@1.1
 pip3 install urllib3==1.26.15
 

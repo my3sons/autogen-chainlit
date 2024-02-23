@@ -1,6 +1,6 @@
 chainlit
 pyautogen
-python-decouple
 langchain
 langchain-openai
 python-dotenv
+psycopg2-binary

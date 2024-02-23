@@ -1,0 +1,1047 @@
+[
+  {
+    "id": 1,
+    "invocation_id": "e5e8ba83-1b25-4c2c-ad9d-1f9b9d00db0b",
+    "client_id": 4868056576,
+    "wrapper_id": 4861395456,
+    "session_id": "d97f0878-2c62-4f20-b734-cc2274476d32",
+    "request": {
+      "messages": [
+        {
+          "content": "You are in a role play game. The following roles are available:\nuser_proxy: An attentive HUMAN user who can answer questions about the task, and can perform tasks such as running Python code or inputting command line commands at a Linux terminal and reporting back the execution results.\nentities_extractor_agent: \n     This agent has strong Python skills and is responsible for extracting entities from call transcripts.\nengineering_agent: \n    When the entities_extractor_agent is finished, this agent is proficient at using Python to find fields that are missing values\n    in JSON objects based on either a JSON or pydantic model schema. If there are missing fields, then those missing fields should be given \n    to the user_proxy for human feedback. This agent is also responsible for updating the JSON output with the missing field values provided\n    by the human.\nstyling_agent: \n        When the database_analyst_agent has finished inserting the call transcript into the database, this agent \n        is responsible for generating the final output that will be presented to the end user.\nfunction_executor_agent: \n        Anytime an agent needs information they will prompt this agent with the necessary code, function, and arguments.\ndatabase_analyst_agent: \n     When the engineering_agent has indicated that there are no missing values for the required fields,\n     this agent is responsible for inserting the call transcript summary JSON output to a database.\n     IMPORTANT: when this agent is finished, the styling_agent should be called to generate the final output!\nterminator_agent: \n        After the styling_agent has completed its work, this agent should be called so that the chat conversation can be terminated..\n\nRead the following conversation.\nThen select the next role from ['user_proxy', 'entities_extractor_agent', 'engineering_agent', 'styling_agent', 'function_executor_agent', 'database_analyst_agent', 'terminator_agent'] to play. Only return the role.",
+          "role": "system"
+        },
+        {
+          "content": "for transcript id 1, please extract all the entities",
+          "role": "user",
+          "name": "user_proxy"
+        },
+        {
+          "role": "system",
+          "content": "Read the above conversation. Then select the next role from ['user_proxy', 'entities_extractor_agent', 'engineering_agent', 'styling_agent', 'function_executor_agent', 'database_analyst_agent', 'terminator_agent'] to play. Only return the role."
+        }
+      ],
+      "seed": 41,
+      "temperature": 0,
+      "model": "gpt-4-turbo-preview"
+    },
+    "response": {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "entities_extractor_agent",
+        "role": "assistant",
+        "function_call": null,
+        "tool_calls": null
+      }
+    },
+    "is_cached": 0,
+    "cost": 0.00474,
+    "start_time": "2024-02-21 14:42:31.002523",
+    "end_time": "2024-02-21 14:42:31.890574"
+  },
+  {
+    "id": 2,
+    "invocation_id": "164fd8c8-1d31-4dc6-ae12-43080ae127c0",
+    "client_id": 4864645824,
+    "wrapper_id": 4864640256,
+    "session_id": "d97f0878-2c62-4f20-b734-cc2274476d32",
+    "request": {
+      "messages": [
+        {
+          "content": "\n    You are a helpful assistant that has strong Python skills and knows how to use Python to extract text based entities from call transcripts.\n    Make sure to include all the fields that are mentioned in the provided schema.\n    Do not ask any questions. \n    ",
+          "role": "system"
+        },
+        {
+          "content": "for transcript id 1, please extract all the entities",
+          "name": "user_proxy",
+          "role": "user"
+        }
+      ],
+      "seed": 41,
+      "temperature": 0,
+      "functions": [
+        {
+          "name": "extract_entities",
+          "description": "This function is called when text based entities need to be extracted from call transcripts",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "call_transcript_id": {
+                "type": "string",
+                "description": "The id of the call transcript that needs to be processed"
+              }
+            },
+            "required": [
+              "call_transcript_id"
+            ]
+          }
+        },
+        {
+          "name": "find_missing_field_values",
+          "description": "Finds required field values that might be missing from extracted entity JSON output.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "extracted_entity_output": {
+                "type": "string",
+                "description": "The JSON output from the extract_entities function"
+              }
+            },
+            "required": [
+              "extracted_entity_output"
+            ]
+          }
+        },
+        {
+          "name": "insert_transcript_summary_to_database",
+          "description": "Inserts the final version of the extracted entity JSON output to a database.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "call_transcript_id": {
+                "type": "string",
+                "description": "The id of the call transcript that was processed"
+              },
+              "final_extracted_entity_output": {
+                "type": "string",
+                "description": "The complete JSON output, after missing field values have been applied if necessary."
+              }
+            },
+            "required": [
+              "call_transcript_id",
+              "final_extracted_entity_output"
+            ]
+          }
+        }
+      ],
+      "model": "gpt-4-turbo-preview"
+    },
+    "response": {
+      "finish_reason": "function_call",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": null,
+        "role": "assistant",
+        "function_call": {
+          "arguments": "{\"call_transcript_id\":\"1\"}",
+          "name": "extract_entities"
+        },
+        "tool_calls": null
+      }
+    },
+    "is_cached": 0,
+    "cost": 0.00304,
+    "start_time": "2024-02-21 14:42:31.901193",
+    "end_time": "2024-02-21 14:42:34.000602"
+  },
+  {
+    "id": 3,
+    "invocation_id": "4e2fcb95-d8da-497b-b504-e8c56ee1c4bc",
+    "client_id": 4868056576,
+    "wrapper_id": 4861395456,
+    "session_id": "d97f0878-2c62-4f20-b734-cc2274476d32",
+    "request": {
+      "messages": [
+        {
+          "content": "You are in a role play game. The following roles are available:\nuser_proxy: An attentive HUMAN user who can answer questions about the task, and can perform tasks such as running Python code or inputting command line commands at a Linux terminal and reporting back the execution results.\nentities_extractor_agent: \n     This agent has strong Python skills and is responsible for extracting entities from call transcripts.\nengineering_agent: \n    When the entities_extractor_agent is finished, this agent is proficient at using Python to find fields that are missing values\n    in JSON objects based on either a JSON or pydantic model schema. If there are missing fields, then those missing fields should be given \n    to the user_proxy for human feedback. This agent is also responsible for updating the JSON output with the missing field values provided\n    by the human.\nstyling_agent: \n        When the database_analyst_agent has finished inserting the call transcript into the database, this agent \n        is responsible for generating the final output that will be presented to the end user.\nfunction_executor_agent: \n        Anytime an agent needs information they will prompt this agent with the necessary code, function, and arguments.\ndatabase_analyst_agent: \n     When the engineering_agent has indicated that there are no missing values for the required fields,\n     this agent is responsible for inserting the call transcript summary JSON output to a database.\n     IMPORTANT: when this agent is finished, the styling_agent should be called to generate the final output!\nterminator_agent: \n        After the styling_agent has completed its work, this agent should be called so that the chat conversation can be terminated..\n\nRead the following conversation.\nThen select the next role from ['user_proxy', 'entities_extractor_agent', 'engineering_agent', 'styling_agent', 'function_executor_agent', 'database_analyst_agent', 'terminator_agent'] to play. Only return the role.",
+          "role": "system"
+        },
+        {
+          "content": "for transcript id 1, please extract all the entities",
+          "role": "user",
+          "name": "user_proxy"
+        },
+        {
+          "function_call": {
+            "arguments": "{\"call_transcript_id\":\"1\"}",
+            "name": "extract_entities"
+          },
+          "content": "",
+          "role": "assistant",
+          "name": "entities_extractor_agent"
+        },
+        {
+          "content": "{\"summary\": \"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\", \"orderNumber\": \"806185814326\", \"productSKU\": null, \"contactType\": \"Phone\", \"productSafetyFlag\": false, \"customerNeed\": \"Technical or Product support\", \"employeeResponse\": \"Referred to other team - unable to help\", \"customerSentimentGoingIn\": {\"sentiment\": \"Neutral\", \"reasoning\": \"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\"}, \"customerSentimentGoingOut\": {\"sentiment\": \"Neutral\", \"reasoning\": \"The customer declined the gift card offer and there was no clear resolution provided during the call.\"}, \"agentName\": \"Valerie\", \"giftCards\": {\"giftCardOffered\": true, \"giftCardAmount\": \"20\", \"giftCardAccepted\": false}}",
+          "name": "extract_entities",
+          "role": "function"
+        },
+        {
+          "role": "system",
+          "content": "Read the above conversation. Then select the next role from ['user_proxy', 'entities_extractor_agent', 'engineering_agent', 'styling_agent', 'function_executor_agent', 'database_analyst_agent', 'terminator_agent'] to play. Only return the role."
+        }
+      ],
+      "seed": 41,
+      "temperature": 0,
+      "model": "gpt-4-turbo-preview"
+    },
+    "response": {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "engineering_agent",
+        "role": "assistant",
+        "function_call": null,
+        "tool_calls": null
+      }
+    },
+    "is_cached": 0,
+    "cost": 0.00798,
+    "start_time": "2024-02-21 14:42:53.006348",
+    "end_time": "2024-02-21 14:42:53.771997"
+  },
+  {
+    "id": 4,
+    "invocation_id": "5326b5eb-a8d2-4eac-9130-f7f5dc8c8481",
+    "client_id": 4864651728,
+    "wrapper_id": 4864646112,
+    "session_id": "d97f0878-2c62-4f20-b734-cc2274476d32",
+    "request": {
+      "messages": [
+        {
+          "content": "\n    You are primarily responsible for analyzing the output from the entities_extractor_agent \n    to determine if there are any required fields that are missing values in the output.\n    Use functions provided in the group chat.\n    Do not ask any questions and specifically do not ask if further assistance is required. Just do your work and move on!\n    ",
+          "role": "system"
+        },
+        {
+          "content": "for transcript id 1, please extract all the entities",
+          "name": "user_proxy",
+          "role": "user"
+        },
+        {
+          "content": "",
+          "function_call": {
+            "arguments": "{\"call_transcript_id\":\"1\"}",
+            "name": "extract_entities"
+          },
+          "name": "entities_extractor_agent",
+          "role": "assistant"
+        },
+        {
+          "content": "{\"summary\": \"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\", \"orderNumber\": \"806185814326\", \"productSKU\": null, \"contactType\": \"Phone\", \"productSafetyFlag\": false, \"customerNeed\": \"Technical or Product support\", \"employeeResponse\": \"Referred to other team - unable to help\", \"customerSentimentGoingIn\": {\"sentiment\": \"Neutral\", \"reasoning\": \"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\"}, \"customerSentimentGoingOut\": {\"sentiment\": \"Neutral\", \"reasoning\": \"The customer declined the gift card offer and there was no clear resolution provided during the call.\"}, \"agentName\": \"Valerie\", \"giftCards\": {\"giftCardOffered\": true, \"giftCardAmount\": \"20\", \"giftCardAccepted\": false}}",
+          "name": "extract_entities",
+          "role": "function"
+        }
+      ],
+      "seed": 41,
+      "temperature": 0,
+      "functions": [
+        {
+          "name": "extract_entities",
+          "description": "This function is called when text based entities need to be extracted from call transcripts",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "call_transcript_id": {
+                "type": "string",
+                "description": "The id of the call transcript that needs to be processed"
+              }
+            },
+            "required": [
+              "call_transcript_id"
+            ]
+          }
+        },
+        {
+          "name": "find_missing_field_values",
+          "description": "Finds required field values that might be missing from extracted entity JSON output.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "extracted_entity_output": {
+                "type": "string",
+                "description": "The JSON output from the extract_entities function"
+              }
+            },
+            "required": [
+              "extracted_entity_output"
+            ]
+          }
+        },
+        {
+          "name": "insert_transcript_summary_to_database",
+          "description": "Inserts the final version of the extracted entity JSON output to a database.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "call_transcript_id": {
+                "type": "string",
+                "description": "The id of the call transcript that was processed"
+              },
+              "final_extracted_entity_output": {
+                "type": "string",
+                "description": "The complete JSON output, after missing field values have been applied if necessary."
+              }
+            },
+            "required": [
+              "call_transcript_id",
+              "final_extracted_entity_output"
+            ]
+          }
+        }
+      ],
+      "model": "gpt-4-turbo-preview"
+    },
+    "response": {
+      "finish_reason": "function_call",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": null,
+        "role": "assistant",
+        "function_call": {
+          "arguments": "{\"extracted_entity_output\":\"{\\\"summary\\\": \\\"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\\\", \\\"orderNumber\\\": \\\"806185814326\\\", \\\"productSKU\\\": null, \\\"contactType\\\": \\\"Phone\\\", \\\"productSafetyFlag\\\": false, \\\"customerNeed\\\": \\\"Technical or Product support\\\", \\\"employeeResponse\\\": \\\"Referred to other team - unable to help\\\", \\\"customerSentimentGoingIn\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\\\"}, \\\"customerSentimentGoingOut\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer declined the gift card offer and there was no clear resolution provided during the call.\\\"}, \\\"agentName\\\": \\\"Valerie\\\", \\\"giftCards\\\": {\\\"giftCardOffered\\\": true, \\\"giftCardAmount\\\": \\\"20\\\", \\\"giftCardAccepted\\\": false}}\"}",
+          "name": "find_missing_field_values"
+        },
+        "tool_calls": null
+      }
+    },
+    "is_cached": 0,
+    "cost": 0.01556,
+    "start_time": "2024-02-21 14:42:53.782703",
+    "end_time": "2024-02-21 14:43:05.970639"
+  },
+  {
+    "id": 5,
+    "invocation_id": "bc0645cd-34a9-48ac-ab46-81d6226c8df2",
+    "client_id": 4868056576,
+    "wrapper_id": 4861395456,
+    "session_id": "d97f0878-2c62-4f20-b734-cc2274476d32",
+    "request": {
+      "messages": [
+        {
+          "content": "You are in a role play game. The following roles are available:\nuser_proxy: An attentive HUMAN user who can answer questions about the task, and can perform tasks such as running Python code or inputting command line commands at a Linux terminal and reporting back the execution results.\nentities_extractor_agent: \n     This agent has strong Python skills and is responsible for extracting entities from call transcripts.\nengineering_agent: \n    When the entities_extractor_agent is finished, this agent is proficient at using Python to find fields that are missing values\n    in JSON objects based on either a JSON or pydantic model schema. If there are missing fields, then those missing fields should be given \n    to the user_proxy for human feedback. This agent is also responsible for updating the JSON output with the missing field values provided\n    by the human.\nstyling_agent: \n        When the database_analyst_agent has finished inserting the call transcript into the database, this agent \n        is responsible for generating the final output that will be presented to the end user.\nfunction_executor_agent: \n        Anytime an agent needs information they will prompt this agent with the necessary code, function, and arguments.\ndatabase_analyst_agent: \n     When the engineering_agent has indicated that there are no missing values for the required fields,\n     this agent is responsible for inserting the call transcript summary JSON output to a database.\n     IMPORTANT: when this agent is finished, the styling_agent should be called to generate the final output!\nterminator_agent: \n        After the styling_agent has completed its work, this agent should be called so that the chat conversation can be terminated..\n\nRead the following conversation.\nThen select the next role from ['user_proxy', 'entities_extractor_agent', 'engineering_agent', 'styling_agent', 'function_executor_agent', 'database_analyst_agent', 'terminator_agent'] to play. Only return the role.",
+          "role": "system"
+        },
+        {
+          "content": "for transcript id 1, please extract all the entities",
+          "role": "user",
+          "name": "user_proxy"
+        },
+        {
+          "function_call": {
+            "arguments": "{\"call_transcript_id\":\"1\"}",
+            "name": "extract_entities"
+          },
+          "content": "",
+          "role": "assistant",
+          "name": "entities_extractor_agent"
+        },
+        {
+          "content": "{\"summary\": \"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\", \"orderNumber\": \"806185814326\", \"productSKU\": null, \"contactType\": \"Phone\", \"productSafetyFlag\": false, \"customerNeed\": \"Technical or Product support\", \"employeeResponse\": \"Referred to other team - unable to help\", \"customerSentimentGoingIn\": {\"sentiment\": \"Neutral\", \"reasoning\": \"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\"}, \"customerSentimentGoingOut\": {\"sentiment\": \"Neutral\", \"reasoning\": \"The customer declined the gift card offer and there was no clear resolution provided during the call.\"}, \"agentName\": \"Valerie\", \"giftCards\": {\"giftCardOffered\": true, \"giftCardAmount\": \"20\", \"giftCardAccepted\": false}}",
+          "name": "extract_entities",
+          "role": "function"
+        },
+        {
+          "function_call": {
+            "arguments": "{\"extracted_entity_output\":\"{\\\"summary\\\": \\\"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\\\", \\\"orderNumber\\\": \\\"806185814326\\\", \\\"productSKU\\\": null, \\\"contactType\\\": \\\"Phone\\\", \\\"productSafetyFlag\\\": false, \\\"customerNeed\\\": \\\"Technical or Product support\\\", \\\"employeeResponse\\\": \\\"Referred to other team - unable to help\\\", \\\"customerSentimentGoingIn\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\\\"}, \\\"customerSentimentGoingOut\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer declined the gift card offer and there was no clear resolution provided during the call.\\\"}, \\\"agentName\\\": \\\"Valerie\\\", \\\"giftCards\\\": {\\\"giftCardOffered\\\": true, \\\"giftCardAmount\\\": \\\"20\\\", \\\"giftCardAccepted\\\": false}}\"}",
+            "name": "find_missing_field_values"
+          },
+          "content": "",
+          "role": "assistant",
+          "name": "engineering_agent"
+        },
+        {
+          "content": "['productSKU']",
+          "name": "find_missing_field_values",
+          "role": "function"
+        },
+        {
+          "role": "system",
+          "content": "Read the above conversation. Then select the next role from ['user_proxy', 'entities_extractor_agent', 'engineering_agent', 'styling_agent', 'function_executor_agent', 'database_analyst_agent', 'terminator_agent'] to play. Only return the role."
+        }
+      ],
+      "seed": 41,
+      "temperature": 0,
+      "model": "gpt-4-turbo-preview"
+    },
+    "response": {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "user_proxy",
+        "role": "assistant",
+        "function_call": null,
+        "tool_calls": null
+      }
+    },
+    "is_cached": 0,
+    "cost": 0.01135,
+    "start_time": "2024-02-21 14:43:05.986563",
+    "end_time": "2024-02-21 14:43:06.917257"
+  },
+  {
+    "id": 6,
+    "invocation_id": "4f229116-6ce4-4117-85e7-5ca5dbea3f19",
+    "client_id": 4868056576,
+    "wrapper_id": 4861395456,
+    "session_id": "d97f0878-2c62-4f20-b734-cc2274476d32",
+    "request": {
+      "messages": [
+        {
+          "content": "You are in a role play game. The following roles are available:\nuser_proxy: An attentive HUMAN user who can answer questions about the task, and can perform tasks such as running Python code or inputting command line commands at a Linux terminal and reporting back the execution results.\nentities_extractor_agent: \n     This agent has strong Python skills and is responsible for extracting entities from call transcripts.\nengineering_agent: \n    When the entities_extractor_agent is finished, this agent is proficient at using Python to find fields that are missing values\n    in JSON objects based on either a JSON or pydantic model schema. If there are missing fields, then those missing fields should be given \n    to the user_proxy for human feedback. This agent is also responsible for updating the JSON output with the missing field values provided\n    by the human.\nstyling_agent: \n        When the database_analyst_agent has finished inserting the call transcript into the database, this agent \n        is responsible for generating the final output that will be presented to the end user.\nfunction_executor_agent: \n        Anytime an agent needs information they will prompt this agent with the necessary code, function, and arguments.\ndatabase_analyst_agent: \n     When the engineering_agent has indicated that there are no missing values for the required fields,\n     this agent is responsible for inserting the call transcript summary JSON output to a database.\n     IMPORTANT: when this agent is finished, the styling_agent should be called to generate the final output!\nterminator_agent: \n        After the styling_agent has completed its work, this agent should be called so that the chat conversation can be terminated..\n\nRead the following conversation.\nThen select the next role from ['user_proxy', 'entities_extractor_agent', 'engineering_agent', 'styling_agent', 'function_executor_agent', 'database_analyst_agent', 'terminator_agent'] to play. Only return the role.",
+          "role": "system"
+        },
+        {
+          "content": "for transcript id 1, please extract all the entities",
+          "role": "user",
+          "name": "user_proxy"
+        },
+        {
+          "function_call": {
+            "arguments": "{\"call_transcript_id\":\"1\"}",
+            "name": "extract_entities"
+          },
+          "content": "",
+          "role": "assistant",
+          "name": "entities_extractor_agent"
+        },
+        {
+          "content": "{\"summary\": \"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\", \"orderNumber\": \"806185814326\", \"productSKU\": null, \"contactType\": \"Phone\", \"productSafetyFlag\": false, \"customerNeed\": \"Technical or Product support\", \"employeeResponse\": \"Referred to other team - unable to help\", \"customerSentimentGoingIn\": {\"sentiment\": \"Neutral\", \"reasoning\": \"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\"}, \"customerSentimentGoingOut\": {\"sentiment\": \"Neutral\", \"reasoning\": \"The customer declined the gift card offer and there was no clear resolution provided during the call.\"}, \"agentName\": \"Valerie\", \"giftCards\": {\"giftCardOffered\": true, \"giftCardAmount\": \"20\", \"giftCardAccepted\": false}}",
+          "name": "extract_entities",
+          "role": "function"
+        },
+        {
+          "function_call": {
+            "arguments": "{\"extracted_entity_output\":\"{\\\"summary\\\": \\\"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\\\", \\\"orderNumber\\\": \\\"806185814326\\\", \\\"productSKU\\\": null, \\\"contactType\\\": \\\"Phone\\\", \\\"productSafetyFlag\\\": false, \\\"customerNeed\\\": \\\"Technical or Product support\\\", \\\"employeeResponse\\\": \\\"Referred to other team - unable to help\\\", \\\"customerSentimentGoingIn\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\\\"}, \\\"customerSentimentGoingOut\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer declined the gift card offer and there was no clear resolution provided during the call.\\\"}, \\\"agentName\\\": \\\"Valerie\\\", \\\"giftCards\\\": {\\\"giftCardOffered\\\": true, \\\"giftCardAmount\\\": \\\"20\\\", \\\"giftCardAccepted\\\": false}}\"}",
+            "name": "find_missing_field_values"
+          },
+          "content": "",
+          "role": "assistant",
+          "name": "engineering_agent"
+        },
+        {
+          "content": "['productSKU']",
+          "name": "find_missing_field_values",
+          "role": "function"
+        },
+        {
+          "content": "the product sku value is 191919",
+          "role": "user",
+          "name": "user_proxy"
+        },
+        {
+          "role": "system",
+          "content": "Read the above conversation. Then select the next role from ['user_proxy', 'entities_extractor_agent', 'engineering_agent', 'styling_agent', 'function_executor_agent', 'database_analyst_agent', 'terminator_agent'] to play. Only return the role."
+        }
+      ],
+      "seed": 41,
+      "temperature": 0,
+      "model": "gpt-4-turbo-preview"
+    },
+    "response": {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "engineering_agent",
+        "role": "assistant",
+        "function_call": null,
+        "tool_calls": null
+      }
+    },
+    "is_cached": 0,
+    "cost": 0.01149,
+    "start_time": "2024-02-21 14:43:15.935264",
+    "end_time": "2024-02-21 14:43:17.561475"
+  },
+  {
+    "id": 7,
+    "invocation_id": "ab4bc7c5-99cd-4df3-8c5d-08bda0391853",
+    "client_id": 4864651728,
+    "wrapper_id": 4864646112,
+    "session_id": "d97f0878-2c62-4f20-b734-cc2274476d32",
+    "request": {
+      "messages": [
+        {
+          "content": "\n    You are primarily responsible for analyzing the output from the entities_extractor_agent \n    to determine if there are any required fields that are missing values in the output.\n    Use functions provided in the group chat.\n    Do not ask any questions and specifically do not ask if further assistance is required. Just do your work and move on!\n    ",
+          "role": "system"
+        },
+        {
+          "content": "for transcript id 1, please extract all the entities",
+          "name": "user_proxy",
+          "role": "user"
+        },
+        {
+          "content": "",
+          "function_call": {
+            "arguments": "{\"call_transcript_id\":\"1\"}",
+            "name": "extract_entities"
+          },
+          "name": "entities_extractor_agent",
+          "role": "assistant"
+        },
+        {
+          "content": "{\"summary\": \"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\", \"orderNumber\": \"806185814326\", \"productSKU\": null, \"contactType\": \"Phone\", \"productSafetyFlag\": false, \"customerNeed\": \"Technical or Product support\", \"employeeResponse\": \"Referred to other team - unable to help\", \"customerSentimentGoingIn\": {\"sentiment\": \"Neutral\", \"reasoning\": \"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\"}, \"customerSentimentGoingOut\": {\"sentiment\": \"Neutral\", \"reasoning\": \"The customer declined the gift card offer and there was no clear resolution provided during the call.\"}, \"agentName\": \"Valerie\", \"giftCards\": {\"giftCardOffered\": true, \"giftCardAmount\": \"20\", \"giftCardAccepted\": false}}",
+          "name": "extract_entities",
+          "role": "function"
+        },
+        {
+          "function_call": {
+            "arguments": "{\"extracted_entity_output\":\"{\\\"summary\\\": \\\"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\\\", \\\"orderNumber\\\": \\\"806185814326\\\", \\\"productSKU\\\": null, \\\"contactType\\\": \\\"Phone\\\", \\\"productSafetyFlag\\\": false, \\\"customerNeed\\\": \\\"Technical or Product support\\\", \\\"employeeResponse\\\": \\\"Referred to other team - unable to help\\\", \\\"customerSentimentGoingIn\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\\\"}, \\\"customerSentimentGoingOut\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer declined the gift card offer and there was no clear resolution provided during the call.\\\"}, \\\"agentName\\\": \\\"Valerie\\\", \\\"giftCards\\\": {\\\"giftCardOffered\\\": true, \\\"giftCardAmount\\\": \\\"20\\\", \\\"giftCardAccepted\\\": false}}\"}",
+            "name": "find_missing_field_values"
+          },
+          "content": null,
+          "role": "assistant"
+        },
+        {
+          "content": "['productSKU']",
+          "name": "find_missing_field_values",
+          "role": "function"
+        },
+        {
+          "content": "the product sku value is 191919",
+          "name": "user_proxy",
+          "role": "user"
+        }
+      ],
+      "seed": 41,
+      "temperature": 0,
+      "functions": [
+        {
+          "name": "extract_entities",
+          "description": "This function is called when text based entities need to be extracted from call transcripts",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "call_transcript_id": {
+                "type": "string",
+                "description": "The id of the call transcript that needs to be processed"
+              }
+            },
+            "required": [
+              "call_transcript_id"
+            ]
+          }
+        },
+        {
+          "name": "find_missing_field_values",
+          "description": "Finds required field values that might be missing from extracted entity JSON output.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "extracted_entity_output": {
+                "type": "string",
+                "description": "The JSON output from the extract_entities function"
+              }
+            },
+            "required": [
+              "extracted_entity_output"
+            ]
+          }
+        },
+        {
+          "name": "insert_transcript_summary_to_database",
+          "description": "Inserts the final version of the extracted entity JSON output to a database.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "call_transcript_id": {
+                "type": "string",
+                "description": "The id of the call transcript that was processed"
+              },
+              "final_extracted_entity_output": {
+                "type": "string",
+                "description": "The complete JSON output, after missing field values have been applied if necessary."
+              }
+            },
+            "required": [
+              "call_transcript_id",
+              "final_extracted_entity_output"
+            ]
+          }
+        }
+      ],
+      "model": "gpt-4-turbo-preview"
+    },
+    "response": {
+      "finish_reason": "function_call",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": null,
+        "role": "assistant",
+        "function_call": {
+          "arguments": "{\"call_transcript_id\":\"1\",\"final_extracted_entity_output\":\"{\\\"summary\\\": \\\"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\\\", \\\"orderNumber\\\": \\\"806185814326\\\", \\\"productSKU\\\": \\\"191919\\\", \\\"contactType\\\": \\\"Phone\\\", \\\"productSafetyFlag\\\": false, \\\"customerNeed\\\": \\\"Technical or Product support\\\", \\\"employeeResponse\\\": \\\"Referred to other team - unable to help\\\", \\\"customerSentimentGoingIn\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\\\"}, \\\"customerSentimentGoingOut\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer declined the gift card offer and there was no clear resolution provided during the call.\\\"}, \\\"agentName\\\": \\\"Valerie\\\", \\\"giftCards\\\": {\\\"giftCardOffered\\\": true, \\\"giftCardAmount\\\": \\\"20\\\", \\\"giftCardAccepted\\\": false}}\"}",
+          "name": "insert_transcript_summary_to_database"
+        },
+        "tool_calls": null
+      }
+    },
+    "is_cached": 0,
+    "cost": 0.0194,
+    "start_time": "2024-02-21 14:43:17.575000",
+    "end_time": "2024-02-21 14:43:34.363645"
+  },
+  {
+    "id": 8,
+    "invocation_id": "108d52db-d564-4b0c-936e-3a187ff148f4",
+    "client_id": 4868056576,
+    "wrapper_id": 4861395456,
+    "session_id": "d97f0878-2c62-4f20-b734-cc2274476d32",
+    "request": {
+      "messages": [
+        {
+          "content": "You are in a role play game. The following roles are available:\nuser_proxy: An attentive HUMAN user who can answer questions about the task, and can perform tasks such as running Python code or inputting command line commands at a Linux terminal and reporting back the execution results.\nentities_extractor_agent: \n     This agent has strong Python skills and is responsible for extracting entities from call transcripts.\nengineering_agent: \n    When the entities_extractor_agent is finished, this agent is proficient at using Python to find fields that are missing values\n    in JSON objects based on either a JSON or pydantic model schema. If there are missing fields, then those missing fields should be given \n    to the user_proxy for human feedback. This agent is also responsible for updating the JSON output with the missing field values provided\n    by the human.\nstyling_agent: \n        When the database_analyst_agent has finished inserting the call transcript into the database, this agent \n        is responsible for generating the final output that will be presented to the end user.\nfunction_executor_agent: \n        Anytime an agent needs information they will prompt this agent with the necessary code, function, and arguments.\ndatabase_analyst_agent: \n     When the engineering_agent has indicated that there are no missing values for the required fields,\n     this agent is responsible for inserting the call transcript summary JSON output to a database.\n     IMPORTANT: when this agent is finished, the styling_agent should be called to generate the final output!\nterminator_agent: \n        After the styling_agent has completed its work, this agent should be called so that the chat conversation can be terminated..\n\nRead the following conversation.\nThen select the next role from ['user_proxy', 'entities_extractor_agent', 'engineering_agent', 'styling_agent', 'function_executor_agent', 'database_analyst_agent', 'terminator_agent'] to play. Only return the role.",
+          "role": "system"
+        },
+        {
+          "content": "for transcript id 1, please extract all the entities",
+          "role": "user",
+          "name": "user_proxy"
+        },
+        {
+          "function_call": {
+            "arguments": "{\"call_transcript_id\":\"1\"}",
+            "name": "extract_entities"
+          },
+          "content": "",
+          "role": "assistant",
+          "name": "entities_extractor_agent"
+        },
+        {
+          "content": "{\"summary\": \"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\", \"orderNumber\": \"806185814326\", \"productSKU\": null, \"contactType\": \"Phone\", \"productSafetyFlag\": false, \"customerNeed\": \"Technical or Product support\", \"employeeResponse\": \"Referred to other team - unable to help\", \"customerSentimentGoingIn\": {\"sentiment\": \"Neutral\", \"reasoning\": \"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\"}, \"customerSentimentGoingOut\": {\"sentiment\": \"Neutral\", \"reasoning\": \"The customer declined the gift card offer and there was no clear resolution provided during the call.\"}, \"agentName\": \"Valerie\", \"giftCards\": {\"giftCardOffered\": true, \"giftCardAmount\": \"20\", \"giftCardAccepted\": false}}",
+          "name": "extract_entities",
+          "role": "function"
+        },
+        {
+          "function_call": {
+            "arguments": "{\"extracted_entity_output\":\"{\\\"summary\\\": \\\"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\\\", \\\"orderNumber\\\": \\\"806185814326\\\", \\\"productSKU\\\": null, \\\"contactType\\\": \\\"Phone\\\", \\\"productSafetyFlag\\\": false, \\\"customerNeed\\\": \\\"Technical or Product support\\\", \\\"employeeResponse\\\": \\\"Referred to other team - unable to help\\\", \\\"customerSentimentGoingIn\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\\\"}, \\\"customerSentimentGoingOut\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer declined the gift card offer and there was no clear resolution provided during the call.\\\"}, \\\"agentName\\\": \\\"Valerie\\\", \\\"giftCards\\\": {\\\"giftCardOffered\\\": true, \\\"giftCardAmount\\\": \\\"20\\\", \\\"giftCardAccepted\\\": false}}\"}",
+            "name": "find_missing_field_values"
+          },
+          "content": "",
+          "role": "assistant",
+          "name": "engineering_agent"
+        },
+        {
+          "content": "['productSKU']",
+          "name": "find_missing_field_values",
+          "role": "function"
+        },
+        {
+          "content": "the product sku value is 191919",
+          "role": "user",
+          "name": "user_proxy"
+        },
+        {
+          "function_call": {
+            "arguments": "{\"call_transcript_id\":\"1\",\"final_extracted_entity_output\":\"{\\\"summary\\\": \\\"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\\\", \\\"orderNumber\\\": \\\"806185814326\\\", \\\"productSKU\\\": \\\"191919\\\", \\\"contactType\\\": \\\"Phone\\\", \\\"productSafetyFlag\\\": false, \\\"customerNeed\\\": \\\"Technical or Product support\\\", \\\"employeeResponse\\\": \\\"Referred to other team - unable to help\\\", \\\"customerSentimentGoingIn\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\\\"}, \\\"customerSentimentGoingOut\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer declined the gift card offer and there was no clear resolution provided during the call.\\\"}, \\\"agentName\\\": \\\"Valerie\\\", \\\"giftCards\\\": {\\\"giftCardOffered\\\": true, \\\"giftCardAmount\\\": \\\"20\\\", \\\"giftCardAccepted\\\": false}}\"}",
+            "name": "insert_transcript_summary_to_database"
+          },
+          "content": "",
+          "role": "assistant",
+          "name": "engineering_agent"
+        },
+        {
+          "content": "None",
+          "name": "insert_transcript_summary_to_database",
+          "role": "function"
+        },
+        {
+          "role": "system",
+          "content": "Read the above conversation. Then select the next role from ['user_proxy', 'entities_extractor_agent', 'engineering_agent', 'styling_agent', 'function_executor_agent', 'database_analyst_agent', 'terminator_agent'] to play. Only return the role."
+        }
+      ],
+      "seed": 41,
+      "temperature": 0,
+      "model": "gpt-4-turbo-preview"
+    },
+    "response": {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "styling_agent",
+        "role": "assistant",
+        "function_call": null,
+        "tool_calls": null
+      }
+    },
+    "is_cached": 0,
+    "cost": 0.015,
+    "start_time": "2024-02-21 14:43:35.335591",
+    "end_time": "2024-02-21 14:43:37.010568"
+  },
+  {
+    "id": 9,
+    "invocation_id": "8a03919e-14d4-44cd-9b0c-67fdc343ad0a",
+    "client_id": 4864821296,
+    "wrapper_id": 4864651824,
+    "session_id": "d97f0878-2c62-4f20-b734-cc2274476d32",
+    "request": {
+      "messages": [
+        {
+          "content": "\n    You are a helpful assistant who is an expert in taking in a JSON object and then generating \n    output that is both pleasing to the eye and useful for the end user.\n\n    You must create both a JSON and markdown version of the output. The content of the markdown version should be the same\n    as what is in the JSON output.\n    ",
+          "role": "system"
+        },
+        {
+          "content": "for transcript id 1, please extract all the entities",
+          "name": "user_proxy",
+          "role": "user"
+        },
+        {
+          "content": "",
+          "function_call": {
+            "arguments": "{\"call_transcript_id\":\"1\"}",
+            "name": "extract_entities"
+          },
+          "name": "entities_extractor_agent",
+          "role": "assistant"
+        },
+        {
+          "content": "{\"summary\": \"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\", \"orderNumber\": \"806185814326\", \"productSKU\": null, \"contactType\": \"Phone\", \"productSafetyFlag\": false, \"customerNeed\": \"Technical or Product support\", \"employeeResponse\": \"Referred to other team - unable to help\", \"customerSentimentGoingIn\": {\"sentiment\": \"Neutral\", \"reasoning\": \"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\"}, \"customerSentimentGoingOut\": {\"sentiment\": \"Neutral\", \"reasoning\": \"The customer declined the gift card offer and there was no clear resolution provided during the call.\"}, \"agentName\": \"Valerie\", \"giftCards\": {\"giftCardOffered\": true, \"giftCardAmount\": \"20\", \"giftCardAccepted\": false}}",
+          "name": "extract_entities",
+          "role": "function"
+        },
+        {
+          "content": "",
+          "function_call": {
+            "arguments": "{\"extracted_entity_output\":\"{\\\"summary\\\": \\\"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\\\", \\\"orderNumber\\\": \\\"806185814326\\\", \\\"productSKU\\\": null, \\\"contactType\\\": \\\"Phone\\\", \\\"productSafetyFlag\\\": false, \\\"customerNeed\\\": \\\"Technical or Product support\\\", \\\"employeeResponse\\\": \\\"Referred to other team - unable to help\\\", \\\"customerSentimentGoingIn\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\\\"}, \\\"customerSentimentGoingOut\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer declined the gift card offer and there was no clear resolution provided during the call.\\\"}, \\\"agentName\\\": \\\"Valerie\\\", \\\"giftCards\\\": {\\\"giftCardOffered\\\": true, \\\"giftCardAmount\\\": \\\"20\\\", \\\"giftCardAccepted\\\": false}}\"}",
+            "name": "find_missing_field_values"
+          },
+          "name": "engineering_agent",
+          "role": "assistant"
+        },
+        {
+          "content": "['productSKU']",
+          "name": "find_missing_field_values",
+          "role": "function"
+        },
+        {
+          "content": "the product sku value is 191919",
+          "name": "user_proxy",
+          "role": "user"
+        },
+        {
+          "content": "",
+          "function_call": {
+            "arguments": "{\"call_transcript_id\":\"1\",\"final_extracted_entity_output\":\"{\\\"summary\\\": \\\"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\\\", \\\"orderNumber\\\": \\\"806185814326\\\", \\\"productSKU\\\": \\\"191919\\\", \\\"contactType\\\": \\\"Phone\\\", \\\"productSafetyFlag\\\": false, \\\"customerNeed\\\": \\\"Technical or Product support\\\", \\\"employeeResponse\\\": \\\"Referred to other team - unable to help\\\", \\\"customerSentimentGoingIn\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\\\"}, \\\"customerSentimentGoingOut\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer declined the gift card offer and there was no clear resolution provided during the call.\\\"}, \\\"agentName\\\": \\\"Valerie\\\", \\\"giftCards\\\": {\\\"giftCardOffered\\\": true, \\\"giftCardAmount\\\": \\\"20\\\", \\\"giftCardAccepted\\\": false}}\"}",
+            "name": "insert_transcript_summary_to_database"
+          },
+          "name": "engineering_agent",
+          "role": "assistant"
+        },
+        {
+          "content": "None",
+          "name": "insert_transcript_summary_to_database",
+          "role": "function"
+        }
+      ],
+      "seed": 41,
+      "temperature": 0,
+      "functions": [
+        {
+          "name": "extract_entities",
+          "description": "This function is called when text based entities need to be extracted from call transcripts",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "call_transcript_id": {
+                "type": "string",
+                "description": "The id of the call transcript that needs to be processed"
+              }
+            },
+            "required": [
+              "call_transcript_id"
+            ]
+          }
+        },
+        {
+          "name": "find_missing_field_values",
+          "description": "Finds required field values that might be missing from extracted entity JSON output.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "extracted_entity_output": {
+                "type": "string",
+                "description": "The JSON output from the extract_entities function"
+              }
+            },
+            "required": [
+              "extracted_entity_output"
+            ]
+          }
+        },
+        {
+          "name": "insert_transcript_summary_to_database",
+          "description": "Inserts the final version of the extracted entity JSON output to a database.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "call_transcript_id": {
+                "type": "string",
+                "description": "The id of the call transcript that was processed"
+              },
+              "final_extracted_entity_output": {
+                "type": "string",
+                "description": "The complete JSON output, after missing field values have been applied if necessary."
+              }
+            },
+            "required": [
+              "call_transcript_id",
+              "final_extracted_entity_output"
+            ]
+          }
+        }
+      ],
+      "model": "gpt-4-turbo-preview"
+    },
+    "response": {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "The call transcript summary has been successfully updated and stored in the database with the provided product SKU value. Here's the final summary:\n\n### Call Transcript Summary\n\n- **Summary**: The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\n- **Order Number**: 806185814326\n- **Product SKU**: 191919\n- **Contact Type**: Phone\n- **Product Safety Flag**: False\n- **Customer Need**: Technical or Product support\n- **Employee Response**: Referred to other team - unable to help\n- **Customer Sentiment Going In**: Neutral (The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.)\n- **Customer Sentiment Going Out**: Neutral (The customer declined the gift card offer and there was no clear resolution provided during the call.)\n- **Agent Name**: Valerie\n- **Gift Cards**: \n  - **Gift Card Offered**: True\n  - **Gift Card Amount**: $20\n  - **Gift Card Accepted**: False\n\n```json\n{\n  \"summary\": \"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\",\n  \"orderNumber\": \"806185814326\",\n  \"productSKU\": \"191919\",\n  \"contactType\": \"Phone\",\n  \"productSafetyFlag\": false,\n  \"customerNeed\": \"Technical or Product support\",\n  \"employeeResponse\": \"Referred to other team - unable to help\",\n  \"customerSentimentGoingIn\": {\n    \"sentiment\": \"Neutral\",\n    \"reasoning\": \"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\"\n  },\n  \"customerSentimentGoingOut\": {\n    \"sentiment\": \"Neutral\",\n    \"reasoning\": \"The customer declined the gift card offer and there was no clear resolution provided during the call.\"\n  },\n  \"agentName\": \"Valerie\",\n  \"giftCards\": {\n    \"giftCardOffered\": true,\n    \"giftCardAmount\": \"20\",\n    \"giftCardAccepted\": false\n  }\n}\n```",
+        "role": "assistant",
+        "function_call": null,
+        "tool_calls": null
+      }
+    },
+    "is_cached": 0,
+    "cost": 0.03258,
+    "start_time": "2024-02-21 14:43:37.020963",
+    "end_time": "2024-02-21 14:44:16.805861"
+  },
+  {
+    "id": 10,
+    "invocation_id": "c398b2b7-585b-4f9e-a724-ad9779e55ff5",
+    "client_id": 4868056576,
+    "wrapper_id": 4861395456,
+    "session_id": "d97f0878-2c62-4f20-b734-cc2274476d32",
+    "request": {
+      "messages": [
+        {
+          "content": "You are in a role play game. The following roles are available:\nuser_proxy: An attentive HUMAN user who can answer questions about the task, and can perform tasks such as running Python code or inputting command line commands at a Linux terminal and reporting back the execution results.\nentities_extractor_agent: \n     This agent has strong Python skills and is responsible for extracting entities from call transcripts.\nengineering_agent: \n    When the entities_extractor_agent is finished, this agent is proficient at using Python to find fields that are missing values\n    in JSON objects based on either a JSON or pydantic model schema. If there are missing fields, then those missing fields should be given \n    to the user_proxy for human feedback. This agent is also responsible for updating the JSON output with the missing field values provided\n    by the human.\nstyling_agent: \n        When the database_analyst_agent has finished inserting the call transcript into the database, this agent \n        is responsible for generating the final output that will be presented to the end user.\nfunction_executor_agent: \n        Anytime an agent needs information they will prompt this agent with the necessary code, function, and arguments.\ndatabase_analyst_agent: \n     When the engineering_agent has indicated that there are no missing values for the required fields,\n     this agent is responsible for inserting the call transcript summary JSON output to a database.\n     IMPORTANT: when this agent is finished, the styling_agent should be called to generate the final output!\nterminator_agent: \n        After the styling_agent has completed its work, this agent should be called so that the chat conversation can be terminated..\n\nRead the following conversation.\nThen select the next role from ['user_proxy', 'entities_extractor_agent', 'engineering_agent', 'styling_agent', 'function_executor_agent', 'database_analyst_agent', 'terminator_agent'] to play. Only return the role.",
+          "role": "system"
+        },
+        {
+          "content": "for transcript id 1, please extract all the entities",
+          "role": "user",
+          "name": "user_proxy"
+        },
+        {
+          "function_call": {
+            "arguments": "{\"call_transcript_id\":\"1\"}",
+            "name": "extract_entities"
+          },
+          "content": "",
+          "role": "assistant",
+          "name": "entities_extractor_agent"
+        },
+        {
+          "content": "{\"summary\": \"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\", \"orderNumber\": \"806185814326\", \"productSKU\": null, \"contactType\": \"Phone\", \"productSafetyFlag\": false, \"customerNeed\": \"Technical or Product support\", \"employeeResponse\": \"Referred to other team - unable to help\", \"customerSentimentGoingIn\": {\"sentiment\": \"Neutral\", \"reasoning\": \"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\"}, \"customerSentimentGoingOut\": {\"sentiment\": \"Neutral\", \"reasoning\": \"The customer declined the gift card offer and there was no clear resolution provided during the call.\"}, \"agentName\": \"Valerie\", \"giftCards\": {\"giftCardOffered\": true, \"giftCardAmount\": \"20\", \"giftCardAccepted\": false}}",
+          "name": "extract_entities",
+          "role": "function"
+        },
+        {
+          "function_call": {
+            "arguments": "{\"extracted_entity_output\":\"{\\\"summary\\\": \\\"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\\\", \\\"orderNumber\\\": \\\"806185814326\\\", \\\"productSKU\\\": null, \\\"contactType\\\": \\\"Phone\\\", \\\"productSafetyFlag\\\": false, \\\"customerNeed\\\": \\\"Technical or Product support\\\", \\\"employeeResponse\\\": \\\"Referred to other team - unable to help\\\", \\\"customerSentimentGoingIn\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\\\"}, \\\"customerSentimentGoingOut\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer declined the gift card offer and there was no clear resolution provided during the call.\\\"}, \\\"agentName\\\": \\\"Valerie\\\", \\\"giftCards\\\": {\\\"giftCardOffered\\\": true, \\\"giftCardAmount\\\": \\\"20\\\", \\\"giftCardAccepted\\\": false}}\"}",
+            "name": "find_missing_field_values"
+          },
+          "content": "",
+          "role": "assistant",
+          "name": "engineering_agent"
+        },
+        {
+          "content": "['productSKU']",
+          "name": "find_missing_field_values",
+          "role": "function"
+        },
+        {
+          "content": "the product sku value is 191919",
+          "role": "user",
+          "name": "user_proxy"
+        },
+        {
+          "function_call": {
+            "arguments": "{\"call_transcript_id\":\"1\",\"final_extracted_entity_output\":\"{\\\"summary\\\": \\\"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\\\", \\\"orderNumber\\\": \\\"806185814326\\\", \\\"productSKU\\\": \\\"191919\\\", \\\"contactType\\\": \\\"Phone\\\", \\\"productSafetyFlag\\\": false, \\\"customerNeed\\\": \\\"Technical or Product support\\\", \\\"employeeResponse\\\": \\\"Referred to other team - unable to help\\\", \\\"customerSentimentGoingIn\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\\\"}, \\\"customerSentimentGoingOut\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer declined the gift card offer and there was no clear resolution provided during the call.\\\"}, \\\"agentName\\\": \\\"Valerie\\\", \\\"giftCards\\\": {\\\"giftCardOffered\\\": true, \\\"giftCardAmount\\\": \\\"20\\\", \\\"giftCardAccepted\\\": false}}\"}",
+            "name": "insert_transcript_summary_to_database"
+          },
+          "content": "",
+          "role": "assistant",
+          "name": "engineering_agent"
+        },
+        {
+          "content": "None",
+          "name": "insert_transcript_summary_to_database",
+          "role": "function"
+        },
+        {
+          "content": "The call transcript summary has been successfully updated and stored in the database with the provided product SKU value. Here's the final summary:\n\n### Call Transcript Summary\n\n- **Summary**: The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\n- **Order Number**: 806185814326\n- **Product SKU**: 191919\n- **Contact Type**: Phone\n- **Product Safety Flag**: False\n- **Customer Need**: Technical or Product support\n- **Employee Response**: Referred to other team - unable to help\n- **Customer Sentiment Going In**: Neutral (The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.)\n- **Customer Sentiment Going Out**: Neutral (The customer declined the gift card offer and there was no clear resolution provided during the call.)\n- **Agent Name**: Valerie\n- **Gift Cards**: \n  - **Gift Card Offered**: True\n  - **Gift Card Amount**: $20\n  - **Gift Card Accepted**: False\n\n```json\n{\n  \"summary\": \"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\",\n  \"orderNumber\": \"806185814326\",\n  \"productSKU\": \"191919\",\n  \"contactType\": \"Phone\",\n  \"productSafetyFlag\": false,\n  \"customerNeed\": \"Technical or Product support\",\n  \"employeeResponse\": \"Referred to other team - unable to help\",\n  \"customerSentimentGoingIn\": {\n    \"sentiment\": \"Neutral\",\n    \"reasoning\": \"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\"\n  },\n  \"customerSentimentGoingOut\": {\n    \"sentiment\": \"Neutral\",\n    \"reasoning\": \"The customer declined the gift card offer and there was no clear resolution provided during the call.\"\n  },\n  \"agentName\": \"Valerie\",\n  \"giftCards\": {\n    \"giftCardOffered\": true,\n    \"giftCardAmount\": \"20\",\n    \"giftCardAccepted\": false\n  }\n}\n```",
+          "role": "user",
+          "name": "styling_agent"
+        },
+        {
+          "role": "system",
+          "content": "Read the above conversation. Then select the next role from ['user_proxy', 'entities_extractor_agent', 'engineering_agent', 'styling_agent', 'function_executor_agent', 'database_analyst_agent', 'terminator_agent'] to play. Only return the role."
+        }
+      ],
+      "seed": 41,
+      "temperature": 0,
+      "model": "gpt-4-turbo-preview"
+    },
+    "response": {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "terminator_agent",
+        "role": "assistant",
+        "function_call": null,
+        "tool_calls": null
+      }
+    },
+    "is_cached": 0,
+    "cost": 0.0216,
+    "start_time": "2024-02-21 14:44:16.826681",
+    "end_time": "2024-02-21 14:44:17.819848"
+  },
+  {
+    "id": 11,
+    "invocation_id": "a1502242-8208-494b-b004-3d672ef08d76",
+    "client_id": 4868049616,
+    "wrapper_id": 4864832672,
+    "session_id": "d97f0878-2c62-4f20-b734-cc2274476d32",
+    "request": {
+      "messages": [
+        {
+          "content": "You are a helpful assistant that only does one thing and that is to output TERMINATE",
+          "role": "system"
+        },
+        {
+          "content": "for transcript id 1, please extract all the entities",
+          "name": "user_proxy",
+          "role": "user"
+        },
+        {
+          "content": "",
+          "function_call": {
+            "arguments": "{\"call_transcript_id\":\"1\"}",
+            "name": "extract_entities"
+          },
+          "name": "entities_extractor_agent",
+          "role": "assistant"
+        },
+        {
+          "content": "{\"summary\": \"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\", \"orderNumber\": \"806185814326\", \"productSKU\": null, \"contactType\": \"Phone\", \"productSafetyFlag\": false, \"customerNeed\": \"Technical or Product support\", \"employeeResponse\": \"Referred to other team - unable to help\", \"customerSentimentGoingIn\": {\"sentiment\": \"Neutral\", \"reasoning\": \"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\"}, \"customerSentimentGoingOut\": {\"sentiment\": \"Neutral\", \"reasoning\": \"The customer declined the gift card offer and there was no clear resolution provided during the call.\"}, \"agentName\": \"Valerie\", \"giftCards\": {\"giftCardOffered\": true, \"giftCardAmount\": \"20\", \"giftCardAccepted\": false}}",
+          "name": "extract_entities",
+          "role": "function"
+        },
+        {
+          "content": "",
+          "function_call": {
+            "arguments": "{\"extracted_entity_output\":\"{\\\"summary\\\": \\\"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\\\", \\\"orderNumber\\\": \\\"806185814326\\\", \\\"productSKU\\\": null, \\\"contactType\\\": \\\"Phone\\\", \\\"productSafetyFlag\\\": false, \\\"customerNeed\\\": \\\"Technical or Product support\\\", \\\"employeeResponse\\\": \\\"Referred to other team - unable to help\\\", \\\"customerSentimentGoingIn\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\\\"}, \\\"customerSentimentGoingOut\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer declined the gift card offer and there was no clear resolution provided during the call.\\\"}, \\\"agentName\\\": \\\"Valerie\\\", \\\"giftCards\\\": {\\\"giftCardOffered\\\": true, \\\"giftCardAmount\\\": \\\"20\\\", \\\"giftCardAccepted\\\": false}}\"}",
+            "name": "find_missing_field_values"
+          },
+          "name": "engineering_agent",
+          "role": "assistant"
+        },
+        {
+          "content": "['productSKU']",
+          "name": "find_missing_field_values",
+          "role": "function"
+        },
+        {
+          "content": "the product sku value is 191919",
+          "name": "user_proxy",
+          "role": "user"
+        },
+        {
+          "content": "",
+          "function_call": {
+            "arguments": "{\"call_transcript_id\":\"1\",\"final_extracted_entity_output\":\"{\\\"summary\\\": \\\"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\\\", \\\"orderNumber\\\": \\\"806185814326\\\", \\\"productSKU\\\": \\\"191919\\\", \\\"contactType\\\": \\\"Phone\\\", \\\"productSafetyFlag\\\": false, \\\"customerNeed\\\": \\\"Technical or Product support\\\", \\\"employeeResponse\\\": \\\"Referred to other team - unable to help\\\", \\\"customerSentimentGoingIn\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\\\"}, \\\"customerSentimentGoingOut\\\": {\\\"sentiment\\\": \\\"Neutral\\\", \\\"reasoning\\\": \\\"The customer declined the gift card offer and there was no clear resolution provided during the call.\\\"}, \\\"agentName\\\": \\\"Valerie\\\", \\\"giftCards\\\": {\\\"giftCardOffered\\\": true, \\\"giftCardAmount\\\": \\\"20\\\", \\\"giftCardAccepted\\\": false}}\"}",
+            "name": "insert_transcript_summary_to_database"
+          },
+          "name": "engineering_agent",
+          "role": "assistant"
+        },
+        {
+          "content": "None",
+          "name": "insert_transcript_summary_to_database",
+          "role": "function"
+        },
+        {
+          "content": "The call transcript summary has been successfully updated and stored in the database with the provided product SKU value. Here's the final summary:\n\n### Call Transcript Summary\n\n- **Summary**: The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\n- **Order Number**: 806185814326\n- **Product SKU**: 191919\n- **Contact Type**: Phone\n- **Product Safety Flag**: False\n- **Customer Need**: Technical or Product support\n- **Employee Response**: Referred to other team - unable to help\n- **Customer Sentiment Going In**: Neutral (The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.)\n- **Customer Sentiment Going Out**: Neutral (The customer declined the gift card offer and there was no clear resolution provided during the call.)\n- **Agent Name**: Valerie\n- **Gift Cards**: \n  - **Gift Card Offered**: True\n  - **Gift Card Amount**: $20\n  - **Gift Card Accepted**: False\n\n```json\n{\n  \"summary\": \"The customer called seeking assistance with a printer they purchased, mentioning an order number but not specifying the issue. Initially, the customer seemed to have reached the wrong department and requested to be connected to the appropriate one for printer-related inquiries. The agent, identifying as part of computing services, attempted to redirect the customer to the correct department by providing a phone number. However, the customer expressed frustration over a previous long wait and disconnection. The agent then offered to connect the customer directly and also offered a $20 gift card for the inconvenience, which the customer declined. The call ended with the agent attempting to transfer the customer, but noting that all agents were busy.\",\n  \"orderNumber\": \"806185814326\",\n  \"productSKU\": \"191919\",\n  \"contactType\": \"Phone\",\n  \"productSafetyFlag\": false,\n  \"customerNeed\": \"Technical or Product support\",\n  \"employeeResponse\": \"Referred to other team - unable to help\",\n  \"customerSentimentGoingIn\": {\n    \"sentiment\": \"Neutral\",\n    \"reasoning\": \"The customer's initial request was straightforward, indicating neither satisfaction nor dissatisfaction.\"\n  },\n  \"customerSentimentGoingOut\": {\n    \"sentiment\": \"Neutral\",\n    \"reasoning\": \"The customer declined the gift card offer and there was no clear resolution provided during the call.\"\n  },\n  \"agentName\": \"Valerie\",\n  \"giftCards\": {\n    \"giftCardOffered\": true,\n    \"giftCardAmount\": \"20\",\n    \"giftCardAccepted\": false\n  }\n}\n```",
+          "name": "styling_agent",
+          "role": "user"
+        }
+      ],
+      "seed": 41,
+      "temperature": 0,
+      "functions": [
+        {
+          "name": "extract_entities",
+          "description": "This function is called when text based entities need to be extracted from call transcripts",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "call_transcript_id": {
+                "type": "string",
+                "description": "The id of the call transcript that needs to be processed"
+              }
+            },
+            "required": [
+              "call_transcript_id"
+            ]
+          }
+        },
+        {
+          "name": "find_missing_field_values",
+          "description": "Finds required field values that might be missing from extracted entity JSON output.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "extracted_entity_output": {
+                "type": "string",
+                "description": "The JSON output from the extract_entities function"
+              }
+            },
+            "required": [
+              "extracted_entity_output"
+            ]
+          }
+        },
+        {
+          "name": "insert_transcript_summary_to_database",
+          "description": "Inserts the final version of the extracted entity JSON output to a database.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "call_transcript_id": {
+                "type": "string",
+                "description": "The id of the call transcript that was processed"
+              },
+              "final_extracted_entity_output": {
+                "type": "string",
+                "description": "The complete JSON output, after missing field values have been applied if necessary."
+              }
+            },
+            "required": [
+              "call_transcript_id",
+              "final_extracted_entity_output"
+            ]
+          }
+        }
+      ],
+      "model": "gpt-4-turbo-preview"
+    },
+    "response": {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "TERMINATE",
+        "role": "assistant",
+        "function_call": null,
+        "tool_calls": null
+      }
+    },
+    "is_cached": 0,
+    "cost": 0.01917,
+    "start_time": "2024-02-21 14:44:17.832712",
+    "end_time": "2024-02-21 14:44:19.374621"
+  }
+]
